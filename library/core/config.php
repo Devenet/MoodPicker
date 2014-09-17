@@ -38,6 +38,7 @@ abstract class Config {
             'name' => 'mood_picker.db',
             'init' => 'schema.txt'
         ),
+        'themes' => array('default'),
         'debug' => false
     );
     static private $values = NULL;
@@ -52,9 +53,16 @@ abstract class Config {
         return array_key_exists($entry, self::$defaultEntries) ? self::$defaultEntries[$entry] : NULL;
     }
     
+    static private function LoadConfigFile() {
+        if (! is_file(self::FILE_CONFIG)) { die('<!doctype html><html><body><p><strong>No configuration file <code>config.php</code> found!</strong></p><p>The simple way is to copy the file <code>config.default.php</code> into <code>config.php</code> on the root folder of the application.</p></body></html>'); }
+    }
+
     static public function Get($name) {
         if (is_null(self::$values)) {
+            
+            self::LoadConfigFile();
             require_once self::Path(self::FILE_CONFIG);
+
             foreach(self::$entries as $entry) {
                 self::$values[$entry] = (array_key_exists($entry, $_CONFIG)) ? $_CONFIG[$entry] : self::DefaultValue($entry);
             }

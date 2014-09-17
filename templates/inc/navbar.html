@@ -16,12 +16,14 @@
 			</ul>
 
 			<ul class="nav navbar-nav navbar-right">
+				{if="count($themes)>1"}
 	            <li class="dropdown">
 					<a href="?theme=default" class="dropdown-toggle" data-toggle="dropdown">Themes <span class="caret"></span></a>
 					<ul class="dropdown-menu" role="menu">
 						{loop="$themes"}<li><a href="?theme={$value}">{if="$value==$theme"}<strong>{/if}{$value|ucfirst}{if="$value==$theme"}</strong>{/if}</a></li>{/loop}
 					</ul>
 	            </li>
+	            {/if}
                 {if="isset($navbar_right)"}{$navbar_right}{/if}
             </ul>
 		</div>
