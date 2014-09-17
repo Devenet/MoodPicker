@@ -1,10 +1,18 @@
 RewriteEngine On
 
+# Replace /moods/ with your path in the 2 following lines
+RewriteBase /moods/
+ErrorDocument 403 /moods/index.php?page=404
+
+# beautiful URLs
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^([a-z-]+(/[a-z0-9-]+)*)(\?(.+))?$ index.php?page=$1&$4 [L,QSA]
 
-# Replace /moods with the folder name or path where the website is hosted
-# If it is hosted on the root folder of your web server, remove /moods
-ErrorDocument 403 /moods/index.php?page=404
-ErrorDocument 404 /moods/index.php?page=404
+# other pages are 404
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.)*$ index.php?page=404 [L]
+
+# some security
+Options All -Indexes
