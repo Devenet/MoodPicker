@@ -1,0 +1,10 @@
+RewriteEngine On
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^([a-z-]+(/[a-z0-9-]+)*)(\?(.+))?$ index.php?page=$1&$4 [L,QSA]
+
+# Replace /moods with the folder name or path where the website is hosted
+# If it is hosted on the root folder of your web server, remove /moods
+ErrorDocument 403 /moods/index.php?page=404
+ErrorDocument 404 /moods/index.php?page=404

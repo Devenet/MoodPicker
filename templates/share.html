@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+<head>
+	{include="inc/head"}
+</head>
+<body class="share">
+	{include="inc/navbar"}
+
+    <div class="container">
+        <div class="jumbotron espace-top">
+            <h1>Hello you.</h1>
+            <p>Well, the question of the day is, how are you?</p>
+            <div class="pull-right illustration text-info hidden-xs"><img src="{$URL}assets/icons/apple-touch-icon-152x152.png" alt="Mood" /></div>
+            
+        	<form class="share-content" action="share" method="post">
+        		<div class="row">
+        			<div class="col-md-6">
+        				<p class="text-center"><button type="submit" name="mood" value="{$good}" class="btn btn-success btn-lg btn-block"><span class="glyphicon glyphicon-thumbs-up"></span> Good Mood</button></p>
+        			</div>
+        			<div class="col-md-6">
+        				<p class="text-center"><button type="submit" name="mood" value="{$bad}" class="btn btn-danger btn-lg btn-block"><span class="glyphicon glyphicon-thumbs-down"></span> Bad Mood</button></p>
+        			</div>
+        			<input type="hidden" value="{$token}" name="token" />
+        		</div>
+        	</form>
+        </div>
+    </div>
+
+    {include="inc/footer"}
+	{include="inc/script"}
+</body>
+</html>

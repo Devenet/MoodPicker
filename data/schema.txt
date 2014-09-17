@@ -1,0 +1,6 @@
+CREATE TABLE `mood` (
+    `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    `mood_level` INTEGER NOT NULL,
+    `timestamp` INTEGER NOT NULL,
+    `ip` TEXT DEFAULT '0.0.0.0'
+);

@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+<head>
+	{include="inc/head"}
+</head>
+<body class="index">
+	{include="inc/navbar"}
+
+	<div class="container" style="overflow:hidden">
+	    
+	    <div class="page-header no-espace-top espace-bottom">
+	        <h1>What’s the mood like today?</h1>
+	    </div>
+	
+	
+        <h2>Today’s review <small>{function="date('j F Y')"}</small></h2>
+        {if="empty($moods)"}
+        <div class="row"><div class="col-md-6 col-md-offset-3"><div class="alert alert-warning text-center" role="alert">No one has submitted his mood today :-(</div></div></div>
+        {else}
+    	<div class="media espace-top">
+    	    <div class="pull-left">
+                <canvas id="dayChart" class="center-block" width="150" height="150"></canvas>
+            </div>
+            <div class="media-body">
+                <div class="row text-center">
+                    <div class="col-md-4 col-sm-4">
+                        <span class="espace-right"><span class="glyphicon glyphicon-user"></span></span> {$moods|count}
+                    </div>
+                    <div class="col-md-4 col-sm-4">
+                        <span class="espace-right"><span class="glyphicon glyphicon-thumbs-up text-success"></span></span> {$goods_percentage|round:1}%
+                    </div>
+                    <div class="col-md-4 col-sm-4">
+                        <span class="espace-right"><span class="glyphicon glyphicon-thumbs-down text-danger"></span></span> {$bads_percentage|round:1}%
+                    </div>
+                </div>
+            </div>
+    	</div>
+        {/if}
+
+    	
+    	<div class="clearfix"></div>
+    	<h2 class="espace-top-lg">Month’s review <small>{function="date('F')"}</small></h2>
+    	<div class="progress today-month-moods espace-top espace-bottom-lg">
+            <div class="progress-bar progress-bar-success tip" data-title="Good Mood: {$month_goods}" data-placement="bottom" style="width: {$month_goods_percentage}%">
+                {if="$month_goods>0"}<span>{$month_goods_percentage|round:1}%</span>{/if}
+            </div>
+            <div class="progress-bar progress-bar-danger tip" data-title="Bad Mood: {$month_bads}" data-placement="bottom" style="width: {$month_bads_percentage}%">
+                {if="$month_bads>0"}<span>{$month_bads_percentage|round:1}%</span>{/if}
+            </div>
+        </div>
+    	
+	</div>
+    
+    {include="inc/footer"}
+    {include="inc/colorpicker"}
+	{include="inc/script"}
+</body>
+</html>

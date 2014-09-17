@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+<head>
+	{include="inc/head"}
+</head>
+<body class="details">
+	{include="inc/navbar"}
+
+	<div class="container">
+	    <div class="page-header no-espace-top">
+	        {if="count($years) > 1"}
+            <div class="btn-group pull-right">
+                <button type="button" class="btn btn-default" data-toggle="dropdown">Year</button>
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    {loop="$years"}<li><a href="{$URL}details/{$value}" class="details-year">{if="$year == $value"}<span class="strong">{$value}</span>{else}{$value}{/if}</a></li>{/loop}
+                </ul>
+            </div>
+            {/if}
+            <h1>{$year} <small>Review</small></h1>
+	    </div>
+	</div>
+	
+	<div class="container espace-bottom">
+	    <div class="progress year-moods">
+            <div class="progress-bar progress-bar-success tip" data-title="Good Mood: {$year_goods}" data-placement="top" style="width: {$year_goods_percentage}%"></div>
+            <div class="progress-bar progress-bar-danger tip" data-title="Bad Mood: {$year_bads}" data-placement="top" style="width: {$year_bads_percentage}%"></div>
+        </div>
+        <div class="row lead">
+            <div class="col-md-4 col-sm-4 col-xs-4 text-center"><span class="espace-right-sm"><span class="glyphicon glyphicon-user"></span></span> {$year_goods+$year_bads}</div>
+            <div class="col-md-4 col-sm-4 col-xs-4 text-center"><span class="espace-right-sm"><span class="glyphicon glyphicon-thumbs-up text-success"></span></span> {$year_goods_percentage|round:1}%</div>
+            <div class="col-md-4 col-sm-4 col-xs-4 text-center"><span class="espace-right-sm"><span class="glyphicon glyphicon-thumbs-down text-danger"></span></span> {$year_bads_percentage|round:1}%</div>
+        </div>
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <h3>Global review</h3>
+                <canvas id="chartYear" width="500" height="200"  class="center-block"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <hr />
+    
+    <div class="container">
+        <div class="row espace">
+            {loop="$months"}
+            <div class="col-lg-4 col-md-6 col-sm-6 espace-bottom">
+                <div class="media">
+                    <div class="pull-left espace-right"><canvas id="chartMonth{$key}" width="125" height="125"></canvas></div>
+                    <div class="media-body">
+                        <h2 class="media-heading espace-bottom-sm">{*<a href="details/{$year}/{$key}">*}{function="date('F', mktime(0, 0, 0, $key, 1))"}{*</a>*}</h2>
+                        <ul class="list-unstyled">
+                            <li><span class="pull-left espace-right-sm"><span class="glyphicon glyphicon-user"></span></span> {$value.total}</li>
+                            <li><span class="pull-left espace-right-sm"><span class="glyphicon glyphicon-thumbs-up text-success"></span></span> {$value.goods_percentage|round:1}%</li>
+                            <li><span class="pull-left espace-right-sm"><span class="glyphicon glyphicon-thumbs-down text-danger"></span></span> {$value.bads_percentage|round:1}%</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            {/loop}
+        </div>
+	</div>
+    
+    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="loadingModal" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content text-center" id="loadingModal">
+                Loading&hellip;
+            </div>
+        </div>
+    </div>
+    
+    {include="inc/footer"}
+    {include="inc/colorpicker"}
+	{include="inc/script"}
+</body>
+</html>

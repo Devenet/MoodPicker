@@ -1,0 +1,93 @@
+/**
+ * Author: Nicolas Devenet
+ */
+
+/*
+ * Common
+ */
+.espace { margin-top: 25px; margin-bottom: 25px; }
+.espace-top { margin-top: 25px; }
+.espace-top-sm { margin-top: 10px; }
+.espace-top-lg { margin-top: 50px; }
+.espace-bottom { margin-bottom: 25px; }
+.espace-bottom-lg { margin-bottom: 10px; }
+.espace-bottom-lg { margin-bottom: 50px; }
+.espace-right { margin-right: 25px; }
+.espace-right-sm { margin-right: 10px; }
+.no-espace { margin-top: 0; margin-bottom: 0; }
+.no-espace-top { margin-top: 0; }
+.no-espace-bottom { margin-bottom: 0; }
+.strong { font-weight: bold; }
+
+.navbar-header .navbar-brand img { vertical-align: bottom; }
+pre.terminal { background-color: #444; color: #FFF; border: medium none; }
+canvas { max-width: 100%; }
+.db_access { position: fixed; right: 0; bottom: 0; padding: 5px 10px; font-family: sans-serif; font-size: 11px; color: #fff; line-height: 12px; text-align: right; background: rgba(0, 0, 0, .7); -webkit-border-radius: 4px 0 0 0; -moz-border-radius: 4px 0 0 0; border-radius: 4px 0 0 0; }
+.stick { position: fixed; top: 10px;  max-width: 100%; }
+
+/*
+ * Pages
+ */
+/* index */
+.index .media > .pull-left {
+    margin-right: 50px;
+}   
+.index .media-body {
+    font-size: 1.8em;
+    line-height: 1.8;
+}
+
+.today-moods {
+    margin-top: 10px;
+    font-size: 40px;
+    line-height: 1;
+}
+.today-month-moods,
+.today-month-moods .progress,
+.today-month-moods .progress-bar {
+    height: 50px;
+    line-height: 50px;
+    font-size: 1em;
+}
+
+/* share */
+.share .illustration {
+    float: right;
+    margin-top: -140px;
+}
+.share-content {
+	margin: 15% auto auto;
+}
+.share-content button.btn span {
+	font-size: 2em;
+	display: block;
+	margin: 0 auto 10px;
+}
+
+/* details */
+.details .media > .pull-left {
+    margin-right: 50px;
+}
+.details .progress,
+.details .progress-bar {
+    height: 50px;
+    line-height: 50px;
+    font-size: 1em;
+}
+.details .modal .modal-dialog {
+    position: absolute;
+    left: 40%;
+    top: 42%;
+}
+.details .modal .modal-content {
+    padding: 20px 0;
+}
+
+/*
+ * Media Queries
+ */
+@media(min-width: 768px) {
+    .index .media-body {
+        line-height: 150px;
+    }
+}

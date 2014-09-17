@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+<head>
+    {include="inc/head"}
+</head>
+<body class="error">
+    {include="inc/navbar"}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2">
+                <h2>Holy crap!</h2>
+                
+                <div class="panel panel-danger espace-top">
+                <div class="panel-heading"><h3 class="panel-title">{$error_title}</h3></div>
+                <div class="panel-body">{$error_content}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {include="inc/footer"}
+    {include="inc/script"}
+</body>
+</html>

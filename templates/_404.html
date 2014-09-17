@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+<head>
+	{include="inc/head"}
+</head>
+<body>
+	{include="inc/navbar"}
+
+	<div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2">
+                <h1>Holy crap, it’s a <strong>404 Error</strong>.</h1>
+                
+                <div class="panel panel-danger espace-top-lg">
+                <div class="panel-body">
+                    <strong>The requested URL was not found on this server.</strong>
+                    
+                    <br /><br />That’s so bad&hellip; But be strong!
+                    <br />You can also browse the <a href="{$URL}">homepage</a> and find what you’re looking for.
+                </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row espace">
+            <div class="col-lg-8 col-lg-offset-2">
+                <p>To show our support, look at this little cute cat:</p>
+                <img class="center-block img-circle" src="//lorempixel.com/300/300/cats/" alt="Cute cat" />
+            </div>
+        </div>
+        
+    </div>
+
+    {include="inc/footer"}
+	{include="inc/script"}
+	<script>
+        $(function(){
+            $('img.img-circle').css('cursor', 'pointer');
+            $('img.img-circle').on('click', function(){ $(this).attr('src', $(this).attr('src')+'?'+new Date().getTime()); });
+        });
+	</script>
+</body>
+</html>
