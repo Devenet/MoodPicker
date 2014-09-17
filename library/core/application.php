@@ -38,6 +38,8 @@ final class Application {
     const VERSION = '1.0';
 
 	public function __construct() {
+        $this->checkRequirements();
+
         $this->theme = Theme::Instance();
 		$this->template = new Tpl();
 		$this->template->configure(array(
@@ -61,6 +63,14 @@ final class Application {
 
         $this->checkTheme();
 	}
+
+    // check requirements
+    private function checkRequirements() {
+        // is SQLite3 available
+        if (! class_exists('SQLite3', false)) { die('<p>Holy crap! The PHP extension <strong>SQLite3</strong> is not actived or installed.</p>'); }
+        // can we write 
+        if (! is_writable(Config::DIR_DATA)) { die('<p>Holy crap! Application does not have the right to write in its own directory <code>'.realpath(dirname(__FILE__)).'</code>.</p>'); }
+    }
 	
 	// get URL base
 	public function URL($file = '') {
