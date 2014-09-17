@@ -32,23 +32,20 @@ class SQLite {
             $db_info = Config::Get('database');
             $db_file = Config::Path(Config::DIR_DATA.DIRECTORY_SEPARATOR.$db_info['name']);
             
-            if (file_exists($db_file)) {
-                self::$instance = new PDO('sqlite:'.$db_file);
-            
-                self::$instance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                self::$instance->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-            }
-            else {
+            if (! file_exists($db_file)) {
                 $schema = file_get_contents(Config::Path(Config::DIR_DATA.DIRECTORY_SEPARATOR.$db_info['init']));
                 $schema = str_replace("\n", ' ', $schema);
                 $schema = str_replace("\r", ' ', $schema);
                 
                 $db = new SQLite3($db_file, SQLITE3_OPEN_CREATE | SQLITE3_OPEN_READWRITE);
                 $db->exec($schema);
-                
-                echo 'Database file has just been created. Reload the webapp.';
-                exit();
             }
+
+            // load database
+            self::$instance = new PDO('sqlite:'.$db_file);
+            self::$instance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            self::$instance->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+
         }
         self::$access++;
         return self::$instance;
