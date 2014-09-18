@@ -50,6 +50,14 @@ RewriteBase /apps/mymood/
 ErrorDocument 403 /apps/mymood//index.php?page=404
 ```
 
+#### Writable data directory
+
+Be sure that the application have rights to write in the `data` folder.
+
+```sh
+chown www-data -R moods/data
+```
+
 ## Customization
 
 There are few options to customize your Mood Picker.
