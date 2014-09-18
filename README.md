@@ -1,6 +1,16 @@
 # MoodPicker - Resources
 
-This branch contains some resources.
+This branch contains some interesting resources.
+
+## Config example files
+
+* The [default config](https://github.com/nicolabricot/MoodPicker/blob/resources/config/config.default.php) file
+* The [full options config](https://github.com/nicolabricot/MoodPicker/blob/resources/config/config.full.php) file
+
+
+## Screenshoots
+
+A [list of screenshots](https://github.com/nicolabricot/MoodPicker/blob/resources/screenshots/README.md) of Mood Picker.
 
 ## Fake full database
 
