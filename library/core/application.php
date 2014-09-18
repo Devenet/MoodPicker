@@ -152,6 +152,7 @@ final class Application {
         $this->template->assign('app_title', Config::Get('title'));
         $this->template->assign('app_description', is_null(Config::Get('description')) ? Config::Get('title') : Config::Get('description'));
         $this->template->assign('app_copyright', Config::Get('copyright'));
+        $this->template->assign('app_version', self::VERSION);
         
         // navbar
         if (! isset($this->modules[Menu::NAVBAR])) {
