@@ -37,12 +37,13 @@ That's it.
 
 #### Other path URL
 
-If the webapp is not stored in the `moods` folder on your root web server folder, you have to do two more steps. Let's assume you have installed MoodPicker in `apps/mymood` and you browse it under `http://mywebsite.tld/apps/mymood`.
-1. Edit the `config.php` file to update the URL setting:
+If the webapp is not stored in the `moods` folder on your root web server folder, you have to do two more steps. Let's assume you have installed MoodPicker in `apps/mymood` and you browse it under `http://mywebsite.tld/apps/mymood`. 
+
+1) Edit the `config.php` file to update the URL setting:
 ```php
 'url' => '/apps/mymood'
 ```
-2. Edit the `.htaccess` file and update the two following lines:
+2) Edit the `.htaccess` file and update the two following lines:
 ```
 # Replace /moods/ with your path in the 2 following lines
 RewriteBase /apps/mymood/
@@ -110,10 +111,11 @@ An API is available to get moods, and also to submit some.
 ### Credentials
 
 You need to edit the `config.php` file to add credential for each app which need to acces the API.
+Do not use the example credentials for security reasons!
 
 ### Documentation
 
-Browse the page `http://mywebsite.tld/moods/api/documentation`.
+The API documentation is available on the API page on your Mood Picker.
 
 ***
 
