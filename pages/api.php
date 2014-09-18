@@ -18,13 +18,13 @@ Code source hosted on https://github.com/nicolabricot/MoodPicker
 
 use Picker\API;
 use Utils\Cookie;
+use Utils\TextHelper;
 
 $api = new API();
 
 switch($this->request(1)) {
     case 'documentation':
         $this->page('api/documentation');
-        $this->assign('api_version', API::VERSION);
         $this->fakePage('api');
         if (! Cookie::Exists('notice_apidoc')) {
             $this->assign('displayNotice', TRUE);

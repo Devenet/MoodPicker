@@ -23,7 +23,9 @@ use Core\Config;
 use Core\Token;
 use Utils\Menu;
 use Utils\Cookie;
+use Utils\TextHelper;
 use Database\SQLite;
+
 
 final class Application {
 
@@ -35,7 +37,7 @@ final class Application {
 	private $modules;
 	private $url;
 
-    const VERSION = '1.0';
+    const VERSION = '1.0.0';
 
 	public function __construct() {
         $this->checkRequirements();
@@ -152,7 +154,10 @@ final class Application {
         $this->template->assign('app_title', Config::Get('title'));
         $this->template->assign('app_description', is_null(Config::Get('description')) ? Config::Get('title') : Config::Get('description'));
         $this->template->assign('app_copyright', Config::Get('copyright'));
-        $this->template->assign('app_version', self::VERSION);
+        $this->template->assign('app_version', TextHelper::niceVersion(self::VERSION));
+        $this->template->assign('app_api_version', TextHelper::niceVersion(\Picker\API::VERSION));
+        $this->template->assign('app_full_version', self::VERSION);
+        $this->template->assign('app_full_api_version', \Picker\API::VERSION);
         
         // navbar
         if (! isset($this->modules[Menu::NAVBAR])) {

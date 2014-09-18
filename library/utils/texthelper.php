@@ -20,9 +20,13 @@ namespace Utils;
 
 abstract class TextHelper {
     
-    static public function removeLineBreak ($string) {
+    static public function removeLineBreak($string) {
         $string = preg_replace('/^\s+|\r|\s+$/m', '', $string);
         return preg_replace('/^\s+|\n|\s+$/m', ' ', $string);
+    }
+
+    static public function niceVersion($version) {
+    	return preg_replace('#(\d+\.\d+)(\.\d+)#', '$1', $version);
     }
 }
 

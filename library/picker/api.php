@@ -25,7 +25,7 @@ use Core\Config;
 
 class API extends \Core\API {
     
-    const VERSION = '1.0';
+    const VERSION = '1.0.0';
     const TOKENS_FILE = 'api_tokens';
     
     const E_FORMAT_DATE = 'Date format is invalid';
