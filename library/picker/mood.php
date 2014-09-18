@@ -90,9 +90,9 @@ class Mood {
         $db = SQLite::Instance();
         $options = array( 'date' => $year );
         if (is_null($mood_level)) {
-            $query = $db->prepare("SELECT id, mood_level, timestamp, ip FROM mood WHERE strftime('%Y', timestamp, 'unixepoch') = :date ORDER BY timestamp DESC");
+            $query = $db->prepare("SELECT id, mood_level, timestamp, ip FROM mood WHERE strftime('%Y', timestamp, 'unixepoch', 'localtime') = :date ORDER BY timestamp DESC");
         } else {
-            $query = $db->prepare("SELECT id, mood_level, timestamp, ip FROM mood WHERE mood_level = :mood AND strftime('%Y', timestamp, 'unixepoch') = :date ORDER BY timestamp DESC");
+            $query = $db->prepare("SELECT id, mood_level, timestamp, ip FROM mood WHERE mood_level = :mood AND strftime('%Y', timestamp, 'unixepoch', 'localtime') = :date ORDER BY timestamp DESC");
             $options['mood'] = $mood_level;
         }
         $query->execute($options);
@@ -110,9 +110,9 @@ class Mood {
         $db = SQLite::Instance();
         $options = array( 'date' => $year.$month );
         if (is_null($mood_level)) {
-            $query = $db->prepare("SELECT id, mood_level, timestamp, ip FROM mood WHERE strftime('%Y%m', timestamp, 'unixepoch') = :date ORDER BY timestamp DESC");
+            $query = $db->prepare("SELECT id, mood_level, timestamp, ip FROM mood WHERE strftime('%Y%m', timestamp, 'unixepoch', 'localtime') = :date ORDER BY timestamp DESC");
         } else {
-            $query = $db->prepare("SELECT id, mood_level, timestamp, ip FROM mood WHERE mood_level = :mood AND strftime('%Y%m', timestamp, 'unixepoch') = :date ORDER BY timestamp DESC");
+            $query = $db->prepare("SELECT id, mood_level, timestamp, ip FROM mood WHERE mood_level = :mood AND strftime('%Y%m', timestamp, 'unixepoch', 'localtime') = :date ORDER BY timestamp DESC");
             $options['mood'] = $mood_level;
         }
         $query->execute($options);
@@ -131,9 +131,9 @@ class Mood {
         $db = SQLite::Instance();
         $options = array( 'date' => $year.$month.$day );
         if (is_null($mood_level)) {
-            $query = $db->prepare("SELECT id, mood_level, timestamp, ip FROM mood WHERE strftime('%Y%m%d', timestamp, 'unixepoch') = :date ORDER BY timestamp DESC");
+            $query = $db->prepare("SELECT id, mood_level, timestamp, ip FROM mood WHERE strftime('%Y%m%d', timestamp, 'unixepoch', 'localtime') = :date ORDER BY timestamp DESC");
         } else {
-            $query = $db->prepare("SELECT id, mood_level, timestamp, ip FROM mood WHERE mood_level = :mood AND strftime('%Y%m%d', timestamp, 'unixepoch') = :date ORDER BY timestamp DESC");
+            $query = $db->prepare("SELECT id, mood_level, timestamp, ip FROM mood WHERE mood_level = :mood AND strftime('%Y%m%d', timestamp, 'unixepoch', 'localtime') = :date ORDER BY timestamp DESC");
             $options['mood'] = $mood_level;
         }
         $query->execute($options);
@@ -163,9 +163,9 @@ class Mood {
         $db = SQLite::Instance();
         $options = array( 'date' => $year );
         if (is_null($mood_level)) {
-            $query = $db->prepare("SELECT COUNT(id) AS count FROM mood WHERE strftime('%Y', timestamp, 'unixepoch') = :date");
+            $query = $db->prepare("SELECT COUNT(id) AS count FROM mood WHERE strftime('%Y', timestamp, 'unixepoch', 'localtime') = :date");
         } else {
-            $query = $db->prepare("SELECT COUNT(id) AS count FROM mood WHERE mood_level = :mood AND strftime('%Y', timestamp, 'unixepoch') = :date");
+            $query = $db->prepare("SELECT COUNT(id) AS count FROM mood WHERE mood_level = :mood AND strftime('%Y', timestamp, 'unixepoch', 'localtime') = :date");
             $options['mood'] = $mood_level;
         }
         $query->execute($options);
@@ -181,9 +181,9 @@ class Mood {
         $db = SQLite::Instance();
         $options = array( 'date' => $year.$month );
         if (is_null($mood_level)) {
-            $query = $db->prepare("SELECT COUNT(id) AS count FROM mood WHERE strftime('%Y%m', timestamp, 'unixepoch') = :date");
+            $query = $db->prepare("SELECT COUNT(id) AS count FROM mood WHERE strftime('%Y%m', timestamp, 'unixepoch', 'localtime') = :date");
         } else {
-            $query = $db->prepare("SELECT COUNT(id) AS count FROM mood WHERE mood_level = :mood AND strftime('%Y%m', timestamp, 'unixepoch') = :date");
+            $query = $db->prepare("SELECT COUNT(id) AS count FROM mood WHERE mood_level = :mood AND strftime('%Y%m', timestamp, 'unixepoch', 'localtime') = :date");
             $options['mood'] = $mood_level;
         }
         $query->execute($options);
@@ -196,7 +196,7 @@ class Mood {
     static public function YearsAvailable() {
         $years = array();
         $db = SQLite::Instance();
-        $query = $db->query("SELECT DISTINCT strftime('%Y', timestamp, 'unixepoch') AS year FROM mood ORDER BY year DESC");
+        $query = $db->query("SELECT DISTINCT strftime('%Y', timestamp, 'unixepoch', 'localtime') AS year FROM mood ORDER BY year DESC");
         while ($data = $query->fetch())
             $years[] = $data['year'];
         $query->closeCursor();
@@ -208,7 +208,7 @@ class Mood {
         $months = array();
         if (is_null($year)) { $year = date('Y'); }
         $db = SQLite::Instance();
-        $query = $db->prepare("SELECT DISTINCT strftime('%m', timestamp, 'unixepoch') AS month FROM mood WHERE strftime('%Y', timestamp, 'unixepoch') = :year ORDER BY month DESC");
+        $query = $db->prepare("SELECT DISTINCT strftime('%m', timestamp, 'unixepoch', 'localtime') AS month FROM mood WHERE strftime('%Y', timestamp, 'unixepoch', 'localtime') = :year ORDER BY month DESC");
         $query->execute(array('year' => $year));
         while ($data = $query->fetch())
             $months[] = $data['month'];
