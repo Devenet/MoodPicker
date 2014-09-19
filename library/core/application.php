@@ -71,7 +71,7 @@ final class Application {
         // is SQLite3 available
         if (! class_exists('SQLite3', false)) { die('<p>Holy crap! The PHP extension <strong>SQLite3</strong> is not actived or installed.</p>'); }
         // can we write 
-        if (! is_writable(Config::DIR_DATA)) { die('<p>Holy crap! Application does not have the right to write in its own directory <code>'.realpath(dirname(__FILE__)).'</code>.</p>'); }
+        if (! is_writable(Config::DIR_DATA)) { die('<p>Holy crap! Application does not have the right to write in its own directory <code>'.Config::DIR_DATA.'</code>.</p>'); }
     }
 	
 	// get URL base
