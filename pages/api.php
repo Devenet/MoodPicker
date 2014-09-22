@@ -31,6 +31,10 @@ switch($this->request(1)) {
             $this->register('script_file', 'cookie.min.js');
         }
         break;
+
+    case 'version':
+        $api->version();
+        break;
         
     case 'translation':
         $api->translation();
@@ -47,11 +51,12 @@ switch($this->request(1)) {
         break;
     
     case 'authentification':
-        $api->authentification($_POST);
+        $api->authentification(file_get_contents('php://input'));
+        //$api->authentification($_POST);
         break;
     
     case 'submit':
-        $api->submit($_POST);
+        $api->submit(file_get_contents('php://input'));
         break;
         
     case NULL:

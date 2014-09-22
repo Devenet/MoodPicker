@@ -31,7 +31,7 @@ class API extends \Core\API {
     const E_FORMAT_DATE = 'Date format is invalid';
     const E_EMPTY_MOOD = 'Required data for Mood is missing';
     const E_FORMAT_MOOD = 'Mood format is invalid';
-    const E_EMPTY_DATA = 'At least one required data is missing';
+    const E_EMPTY_DATA = 'At least one required parameter is missing';
 
     const P_API_KEY = 'api_key';
     const P_API_TOKEN = 'api_token';
@@ -42,7 +42,6 @@ class API extends \Core\API {
     private $tokens;
 
     public function __construct() {
-        $this->data['api_version'] = self::VERSION;
         $this->file = File::Instance(self::TOKENS_FILE);
         $this->tokens = $this->file->GetData();
     }
@@ -78,19 +77,42 @@ class API extends \Core\API {
         $this->file->SaveData($this->tokens);        
         return $found;
     }
+    private function acceptCredentials($key, $token) {
+        foreach (Config::Get('api') as $credential) {
+            if ($credential['key'] == $key && $credential['token'] == $token) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 
     /* API RESPONSES */
 
     public function authentification($data) {
         if (empty($data)) { $this->error(400); }
-        if (! isset($data[self::P_API_KEY]) || empty($data[self::P_API_KEY])) { $this->error(422, self::E_EMPTY_DATA); }
-        if (! isset($data[self::P_API_TOKEN]) || empty($data[self::P_API_TOKEN])) { $this->error(422, self::E_EMPTY_DATA); }
+        try {
+            $data = json_decode($data, true);
 
-        $token = $this->generateToken();
-        $this->data['token'] = $token['token'];
-        $this->data['expire'] = $token['expire'];
+            if (! isset($data[self::P_API_KEY]) || empty($data[self::P_API_KEY])) { $this->error(422, self::E_EMPTY_DATA); }
+            if (! isset($data[self::P_API_TOKEN]) || empty($data[self::P_API_TOKEN])) { $this->error(422, self::E_EMPTY_DATA); }
 
+            if (! $this->acceptCredentials($data[self::P_API_KEY], $data[self::P_API_TOKEN])) { $this->error(401, 'Bad credentials'); }
+
+            $token = $this->generateToken();
+            $this->data['token'] = $token['token'];
+            $this->data['expire'] = $token['expire'];
+
+            $this->send();
+        }
+        catch (\Exception $ex) {
+            $this->error(400);
+        }
+    }
+
+    public function version() {
+        $this->data['api_version'] = self::VERSION;
+        $this->data['moodpicker_version'] = \Core\Application::VERSION;
         $this->send();
     }
 
@@ -171,18 +193,25 @@ class API extends \Core\API {
 
     public function submit($data) {
         if (empty($data)) { $this->error(400); }
-        $this->checkToken($data);
+        try {
+            $data = json_decode($data);
 
-        if (! isset($data[self::P_MOOD]) || empty($data[self::P_MOOD])) { $this->error(422, self::E_EMPTY_MOOD); }
-        if (! MoodLevel::isValidValue($data[self::P_MOOD]+0)) { $this->error(422, self::E_FORMAT_MOOD); }
-        
-        $m = new Mood($data[self::P_MOOD] , time(), $_SERVER['REMOTE_ADDR']);
-        $m->save();
+            $this->checkToken($data);
 
-        $this->data['mood'] = $m->getMood();
-        $this->data['timestamp'] = $m->getTime();
-        
-        $this->send();
+            if (! isset($data[self::P_MOOD]) || empty($data[self::P_MOOD])) { $this->error(422, self::E_EMPTY_MOOD); }
+            if (! MoodLevel::isValidValue($data[self::P_MOOD]+0)) { $this->error(422, self::E_FORMAT_MOOD); }
+            
+            $m = new Mood($data[self::P_MOOD] , time(), $_SERVER['REMOTE_ADDR']);
+            $m->save();
+
+            $this->data['mood'] = $m->getMood();
+            $this->data['timestamp'] = $m->getTime();
+            
+            $this->send();
+        }
+        catch (\Exception $ex) {
+            $this->error(400);
+        }
     }
 
 }
