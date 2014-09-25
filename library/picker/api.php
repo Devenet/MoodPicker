@@ -194,7 +194,7 @@ class API extends \Core\API {
     public function submit($data) {
         if (empty($data)) { $this->error(400); }
         try {
-            $data = json_decode($data);
+            $data = json_decode($data, true);
 
             $this->checkToken($data);
 
