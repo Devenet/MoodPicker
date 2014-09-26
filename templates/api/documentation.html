@@ -33,6 +33,7 @@
                 <div class="list-group navigate" id="summary">
                     <a href="#overview" class="list-group-item"><span class="glyphicon glyphicon-flash"></span> Overview</a>
                     <a href="#errors" class="list-group-item"><span class="glyphicon glyphicon-warning-sign"></span> Errors</a>
+                    <a href="#version" class="list-group-item"><span class="glyphicon glyphicon-info-sign"></span> Version</a>
                     <a href="#authentification" class="list-group-item"><span class="glyphicon glyphicon-lock"></span> Authentification</a>
                     <a href="#moods-translation" class="list-group-item"><span class="glyphicon glyphicon-globe"></span> Moods translation</a>
                     <a href="#mood-review" class="list-group-item"><span class="glyphicon glyphicon-eye-open"></span> Get mood’s review</a>
@@ -48,11 +49,11 @@
                 <!--
                 <div class="panel panel-info"><div class="panel-body"><strong>Data policy:</strong> Data from the API of Mood Picker are for <strong>internal usage only</strong>. If you want to use it externaly, please contact your manager and ask for a written authorization to reuse data outsite the corporation.</div></div>
                 -->
-                <p>The API is available under <kbd>{$_SERVER['SERVER_NAME']}{$URL}api</kbd>.</p>
+                <p>The API is available under <kbd>{$_SERVER['SERVER_NAME']}{$URL}{$api_path}</kbd>.</p>
                 
                 <h2 id="errors">Errors</h2>
 	            <p>If the API is unable to respond to your request, an error (based on HTTP protocol) will be returned.</p>
-	            <pre>{
+	            <pre  class="terminal">{
     "error": 400,
     "message": "Bad Request"
 }</pre>
@@ -69,14 +70,28 @@
 	            </table>
 	            <p>The <code>message</code> field give you often a better explaination, especially when it's a 422 error.</p>
 
+
+				<h2 id="version">Version</h2>
+				<pre>GET <a href="{$URL}{$api_path}/version" rel="external">/version</a></pre>
+				<p>You can get the current version for the API and the MoodPicker application.</p>
+				<pre class="terminal">{"api_version":"1.1.0", "moodpicker_version":"1.1.0"}</pre>
+
+
 	            <h2 id="authentification">Authentification</h2>
-                <pre>POST <a href="{$URL}api/authentification" rel="external">/authentification</a> {"api_key": ":api_key", "api_token": ":api_token"}</pre>
-                <p>Authentification is required to post data. To get open data, such as moods, authentification is not required.
+	            <h3>Get a token</h3>
+                <pre>POST <a href="{$URL}{$api_path}/token" rel="external">/token</a> {"api_key": ":api_key", "api_token": ":api_token"}</pre>
+                <p>Authentification is required to post data through a generated token from the API. To get open data, such as moods, authentification is not required.
                 <br />The request, with your credentials <code>:api_key</code> and <code>:api_token</code>, returns a token you have to use in your next POST request, and the timestamp before expiration.</p>
                 <pre class="terminal">{"token": "token_to_use", "expire": 1410962303}</pre>
+                <h3>Test your credentials</h3>
+                <pre>POST <a href="{$URL}{$api_path}/authentification" rel="external">/authentification</a> {"api_key": ":api_key", "api_token": ":api_token"}</pre>
+                <p>In order to test if the credentials are valid but without asking for a token, you can have an answer using this method.
+                <br />It will return a 401 error or the following JSON.</p>
+                <pre class="terminal">{"authentification": true}</pre>
+
 	            	            
 	            <h2 id="moods-translation">Moods translation</h2>
-	            <pre>GET <a href="{$URL}api/translation" rel="external">/translation</a></pre>
+	            <pre>GET <a href="{$URL}{$api_path}/translation" rel="external">/translation</a></pre>
 	            <h4>Returned values</h4>
                 <pre class="terminal">{
     "translation": {
@@ -95,14 +110,15 @@
         {
             "mood": -1,
             "timestamp": 1406748783
-        }
+        },
+        &hellip;
     ]
 }</pre>
                 <p>This is an example of mood’s review given by the API.
                 <br />Note that the <code>date</code> field could be shorter, depending on what is asked.</p>
 
 	            <h3>Day’s review</h3>
-	            <pre>GET <a href="{$URL}api/day" rel="external">/day</a> <br />GET <a href="{$URL}api/day/{function="date('Y-m-d')"}" rel="external">/day/:date</a></pre>
+	            <pre>GET <a href="{$URL}{$api_path}/day" rel="external">/day</a> <br />GET <a href="{$URL}{$api_path}/day/{function="date('Y-m-d')"}" rel="external">/day/:date</a></pre>
 	            <p>The <code>:date</code> parameter should be formatted like <code>YYYY-MM-DD</code>.
                 <br />If the parameter <code>:date</code> is omitted, the server will return the mood’s review for the server current day.</p>
 	            <dl>
@@ -115,7 +131,7 @@
                 </dl>
 
                 <h3>Month’s review</h3>
-	            <pre>GET <a href="{$URL}api/month" rel="external">/month</a> <br />GET <a href="{$URL}api/month/{function="date('Y-m')"}" rel="external">/month/:date</a></pre>
+	            <pre>GET <a href="{$URL}{$api_path}/month" rel="external">/month</a> <br />GET <a href="{$URL}{$api_path}/month/{function="date('Y-m')"}" rel="external">/month/:date</a></pre>
 	            <p>The <code>:date</code> parameter should be formatted like <code>YYYY-MM</code>.
                 <br />If the parameter <code>:date</code> is omitted, the server will return the mood’s review for the server current month.</p>
 	            <dl>
@@ -126,7 +142,7 @@
                 </dl>
 
 	            <h3>Year’s review</h3>
-	            <pre>GET <a href="{$URL}api/year" rel="external">/year</a> <br />GET <a href="{$URL}api/year/{function="date('Y')"}" rel="external">/year/:date</a></pre>
+	            <pre>GET <a href="{$URL}{$api_path}/year" rel="external">/year</a> <br />GET <a href="{$URL}{$api_path}/year/{function="date('Y')"}" rel="external">/year/:date</a></pre>
 	            <p>The <code>:date</code> parameter should be formatted like <code>YYYY</code>.
                 <br />If the parameter <code>:date</code> is omitted, the server will return the mood’s review for the server current day.</p>
 	            <dl>
@@ -135,7 +151,7 @@
                 </dl>
 
 	            <h2 id="submit-mood">Submit a mood</h2>
-	            <pre>POST <a href="{$URL}api/submit" rel="external">/submit</a> {"mood": :mood}</pre>
+	            <pre>POST <a href="{$URL}{$api_path}/submit" rel="external">/submit</a> {"mood": :mood}</pre>
 	            <p>The parameter <code>:mood</code> is the current mood, and is one of the numeric values got from <a href="#moods-translation" class="navigate"><kbd>/translation</kbd></a>.
                 <br />If everything is OK, the API returns the mood you have submitted.</p>
                 <pre class="terminal">{"mood": 1, "timestamp": 1406748783}</pre>

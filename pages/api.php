@@ -23,49 +23,59 @@ use Utils\TextHelper;
 $api = new API();
 
 switch($this->request(1)) {
+
+    case substr(API::API_PATH, 4):
+        switch ($this->request(2)) {
+
+            case 'version':
+                $api->version();
+                break;
+                
+            case 'translation':
+                $api->translation();
+                break;
+            
+            case 'day':
+                $api->day($this->request(3));
+                break;
+            case 'month':
+                $api->month($this->request(3));
+                break;
+            case 'year':
+                $api->year($this->request(3));
+                break;
+            
+            case 'token':
+                $api->token(file_get_contents('php://input'));
+                break;
+            case 'authentification':
+                $api->authentification(file_get_contents('php://input'));
+                break;
+            
+            case 'submit':
+                $api->submit(file_get_contents('php://input'));
+                break;
+
+            default:
+            $api->error(400);
+        }
+        break;
+
     case 'documentation':
         $this->page('api/documentation');
         $this->fakePage('api');
+        $this->assign('api_path', API::API_PATH);
         if (! Cookie::Exists('notice_apidoc')) {
             $this->assign('displayNotice', TRUE);
             $this->register('script_file', 'cookie.min.js');
         }
         break;
 
-    case 'version':
-        $api->version();
-        break;
-        
-    case 'translation':
-        $api->translation();
-        break;
-    
-    case 'day':
-        $api->day($this->request(2));
-        break;
-    case 'month':
-        $api->month($this->request(2));
-        break;
-    case 'year':
-        $api->year($this->request(2));
-        break;
-    
-    case 'authentification':
-        $api->authentification(file_get_contents('php://input'));
-        //$api->authentification($_POST);
-        break;
-    
-    case 'submit':
-        $api->submit(file_get_contents('php://input'));
-        break;
-        
+
     case NULL:
+    default:
         header('Location: '.$this->URL('api/documentation'));
         exit();
-        break;
-    
-    default:
-        $api->error(400);
 }
 
 

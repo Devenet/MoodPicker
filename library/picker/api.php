@@ -27,6 +27,8 @@ class API extends \Core\API {
     
     const VERSION = '1.0.0';
     const TOKENS_FILE = 'api_tokens';
+
+    const API_PATH = "api/v1";
     
     const E_FORMAT_DATE = 'Date format is invalid';
     const E_EMPTY_MOOD = 'Required data for Mood is missing';
@@ -89,7 +91,7 @@ class API extends \Core\API {
 
     /* API RESPONSES */
 
-    public function authentification($data) {
+    public function token($data) {
         if (empty($data)) { $this->error(400); }
         try {
             $data = json_decode($data, true);
@@ -102,6 +104,25 @@ class API extends \Core\API {
             $token = $this->generateToken();
             $this->data['token'] = $token['token'];
             $this->data['expire'] = $token['expire'];
+
+            $this->send();
+        }
+        catch (\Exception $ex) {
+            $this->error(400);
+        }
+    }
+
+    public function authentification($data) {
+        if (empty($data)) { $this->error(400); }
+        try {
+            $data = json_decode($data, true);
+
+            if (! isset($data[self::P_API_KEY]) || empty($data[self::P_API_KEY])) { $this->error(422, self::E_EMPTY_DATA); }
+            if (! isset($data[self::P_API_TOKEN]) || empty($data[self::P_API_TOKEN])) { $this->error(422, self::E_EMPTY_DATA); }
+
+            if (! $this->acceptCredentials($data[self::P_API_KEY], $data[self::P_API_TOKEN])) { $this->error(401, 'Bad credentials'); }
+
+            $this->data['authentification'] = true;
 
             $this->send();
         }
