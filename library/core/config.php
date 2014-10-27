@@ -35,8 +35,7 @@ abstract class Config {
         'copyright' => 'All rights reserved',
         'database' => array(
             'type' => 'sqlite',
-            'name' => 'mood_picker.db',
-            'init' => 'schema.txt'
+            'name' => 'mood_picker'
         ),
         'themes' => array('default'),
         'debug' => false

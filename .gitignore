@@ -1,5 +1,5 @@
 config.php
 !library/core/config.php
-data/api_tokens.php
+data/api_tokens.db
 data/mood_picker.db
 data/cache/
