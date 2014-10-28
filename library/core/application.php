@@ -37,7 +37,7 @@ final class Application {
 	private $modules;
 	private $url;
 
-    const VERSION = '1.1.1+dev';
+    const VERSION = '1.1.1';
 
 	public function __construct() {
         $this->checkRequirements();
