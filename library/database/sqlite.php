@@ -24,16 +24,22 @@ use Core\Config;
 
 class SQLite {
     
-    private static $instance;
+    const DB_EXTENSION = '.db';
+    const INIT_EXTENSION = '.sql';
+
+    private static $instances;
     private static $access = 0;
 
-    static public function Instance() {
-        if (! isset(self::$instance)) {
-            $db_info = Config::Get('database');
-            $db_file = Config::Path(Config::DIR_DATA.DIRECTORY_SEPARATOR.$db_info['name']);
+    static public function Instance($database = NULL) {
+        if (! isset(self::$instances[$database])) {
+
+            if (is_null($database)) { $db_info = Config::Get('database'); } 
+            else { $db_info = array( 'name' => $database ); }
+            
+            $db_file = Config::Path(Config::DIR_DATA.DIRECTORY_SEPARATOR.$db_info['name'].SQLite::DB_EXTENSION);
             
             if (! file_exists($db_file)) {
-                $schema = file_get_contents(Config::Path(Config::DIR_DATA.DIRECTORY_SEPARATOR.$db_info['init']));
+                $schema = file_get_contents(Config::Path(Config::DIR_DATA.DIRECTORY_SEPARATOR.$db_info['name'].SQLite::INIT_EXTENSION));
                 $schema = str_replace("\n", ' ', $schema);
                 $schema = str_replace("\r", ' ', $schema);
                 
@@ -42,13 +48,13 @@ class SQLite {
             }
 
             // load database
-            self::$instance = new PDO('sqlite:'.$db_file);
-            self::$instance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            self::$instance->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+            self::$instances[$database] = new PDO('sqlite:'.$db_file);
+            self::$instances[$database]->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            self::$instances[$database]->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 
         }
         self::$access++;
-        return self::$instance;
+        return self::$instances[$database];
     }
     
     static public function Access() {

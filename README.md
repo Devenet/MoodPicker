@@ -139,6 +139,7 @@ Refer you to the [LICENSE file](https://github.com/nicolabricot/MoodPicker/blob/
 
 ## Want to contribute?
 
-Source code is hosted on [Github](https://github.com/nicolabricot/MoodPicker) by [nicolabricot](http://nicolabricot.com). Feel free to fork it and to improve the application!
+Source code is hosted on [Github](https://github.com/nicolabricot/MoodPicker) by [nicolabricot](http://nicolabricot.com).  
+Feel free to fork it and to improve the application!
 
 Let me know if you use Mood Picker by sending me an email, I will be happy ;-)

@@ -20,7 +20,7 @@ namespace Picker;
 
 use Picker\Mood;
 use Picker\MoodLevel;
-use DataBase\File;
+use DataBase\SQLite;
 use Core\Config;
 
 class API extends \Core\API {
@@ -40,14 +40,21 @@ class API extends \Core\API {
     const P_TOKEN = 'token';
     const P_MOOD = 'mood';
 
-    private $file;
-    private $tokens;
+    const DB_TOKENS = 'api_tokens';
+    private $db_tokens;
 
     public function __construct() {
-        $this->file = File::Instance(self::TOKENS_FILE);
-        $this->tokens = $this->file->GetData();
+        $this->db_tokens = SQLite::Instance(self::DB_TOKENS);
     }
     
+    protected function getTokens() {
+        $tokens = array();
+        $query = $this->db_tokens->query('SELECT id, token, expire from api_tokens');
+        while ($data = $query->fetch())
+            $tokens[] = array( 'token' => $data['token'], 'expire' => $data['expire'], 'id' => $data['id'] );
+        $query->closeCursor();
+        return $tokens;
+    }
     protected function checkToken($data) {
         if (! isset($data[self::P_TOKEN])) { $this->error(401, 'Bad token'); }
         if (! $this->acceptToken($data[self::P_TOKEN])) { $this->error(401, 'Bad token'); }
@@ -58,25 +65,33 @@ class API extends \Core\API {
             'token' => sha1(uniqid('', TRUE). '_' .mt_rand()),
             'expire' => time() + 60*10
         );
-        $this->tokens[] = $token;
-        $this->file->SaveData($this->tokens);
+        
+        $query = $this->db_tokens->prepare('INSERT INTO api_tokens(token, expire) VALUES (:token, :expire)');
+        $query->execute(array(
+            'token' => $token['token'],
+            'expire' => $token['expire']
+        ));
+        $query->closeCursor();
+
         return $token;
     }
     private function acceptToken($token) {
-        $tokens = array();
+        $tokens = $this->getTokens();
+        $query = $this->db_tokens->prepare('DELETE FROM api_tokens WHERE id = :id');
+        $activeTokens = array();
 
         //remove expired tokens
-        for ($i=0; $i<count($this->tokens); $i++) {
-            if (time() > $this->tokens[$i]['expire']) { array_splice($this->tokens, $i, 1); }
-            else { $tokens[] = $this->tokens[$i]['token']; }
+        for ($i=0; $i<count($tokens); $i++) {
+            if (time() > $tokens[$i]['expire']) { $query->execute(array( 'id' => $tokens[$i]['id'] )); }
+            else { $activeTokens[] = $tokens[$i]['token']; } 
         }
 
-        $position = array_search($token, $tokens);
+        $position = array_search($token, $activeTokens);
         $found = $position >= 0 && $position !== FALSE;
         // if accepted remove it
-        if ($found) { array_splice($this->tokens, $position, 1); }
+        if ($found) { $query->execute(array( 'id' => $tokens[$position]['id'] )); }
+        $query->closeCursor();
 
-        $this->file->SaveData($this->tokens);        
         return $found;
     }
     private function acceptCredentials($key, $token) {
