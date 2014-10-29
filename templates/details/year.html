@@ -1,10 +1,10 @@
 <!doctype html>
 <html>
 <head>
-	{include="inc/head"}
+	{include="../inc/head"}
 </head>
 <body class="details">
-	{include="inc/navbar"}
+	{include="../inc/navbar"}
 
 	<div class="container">
 	    <div class="page-header no-espace-top">
@@ -40,9 +40,9 @@
             </div>
         </div>
     </div>
-    
+       
+    {if="!empty($months)"}
     <hr />
-    
     <div class="container">
         <div class="row espace">
             {loop="$months"}
@@ -62,6 +62,7 @@
             {/loop}
         </div>
 	</div>
+    {/if}
     
     <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="loadingModal" aria-hidden="true">
         <div class="modal-dialog modal-sm">
@@ -71,8 +72,8 @@
         </div>
     </div>
     
-    {include="inc/footer"}
-    {include="inc/colorpicker"}
-	{include="inc/script"}
+    {include="../inc/footer"}
+    {include="../inc/colorpicker"}
+	{include="../inc/script"}
 </body>
 </html>

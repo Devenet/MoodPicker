@@ -21,13 +21,17 @@ use Picker\MoodLevel;
 use Utils\TextHelper;
 use Utils\Cookie;
 
+$this->fakePage('details');
+$this->page('details/year');
+
 $years = Mood::YearsAvailable();
+if (!in_array(date('Y'), $years)) { $years[] = date('Y'); rsort($years); }
 
 // be sure we can display the page
 $year = $this->request(1);
 if (is_null($year)) {
     $year = date('Y');
-} else if (! checkdate(1, 1, $year+0) || ! in_array($year, $years)) {
+} else if (! checkdate(1, 1, $year+0) || ! in_array($year, $years) || $year == date('Y')) {
     header('Location: '.$this->URL('details'));
     exit();
 }
