@@ -37,9 +37,13 @@ final class Application {
 	private $modules;
 	private $url;
 
+    private $timestart;
+
     const VERSION = '1.2.0+dev';
 
 	public function __construct() {
+        $this->timestart = microtime(true);
+
         $this->checkRequirements();
 
         $this->theme = Theme::Instance();
@@ -181,7 +185,9 @@ final class Application {
     // build debug info and alerts
     protected function buildDebug() {
         if (Config::Get('debug')) {
-            $this->template->assign('db_access', SQLite::Access().' db');
+            $this->template->assign('db_access', SQLite::Access());
+            $timeend = microtime(true);
+            $this->template->assign('build_time', number_format(($timeend-$this->timestart)*1000, 2));
         }
         $this->template->assign('debug', Config::Get('debug'));
     }
