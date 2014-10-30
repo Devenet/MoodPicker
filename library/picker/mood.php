@@ -144,17 +144,15 @@ class Mood {
     }
     
     // count all moods
-    static public function CountAllMoods($mood_level = NULL) {
+    static public function CountAllMoods() {
         $db = SQLite::Instance();
-        if (is_null($mood_level)) {
-            $query = $db->query('SELECT COUNT(id) AS count FROM mood');
-        } else {
-            $query = $db->prepare('SELECT COUNT(id) AS count FROM mood WHERE mood_level = :mood');
-            $query->execute(array('mood' => $mood_level));
-        }
-        $data = $query->fetch();
+        $query = $db->query('SELECT mood_level, COUNT(*) AS count FROM mood GROUP BY mood_level ORDER BY mood_level');
+        $data = array();
+        while ($d = $query->fetch())
+            $data[$d['mood_level']] = $d['count'];
         $query->closeCursor();
-        return $data['count'];
+        $data['count'] = $data[MoodLevel::BAD] + $data[MoodLevel::GOOD];
+        return $data;
     }
     
     // count year moods
