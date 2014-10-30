@@ -209,7 +209,7 @@ final class Application {
         if (isset($_POST['token']) && Token::Accept($_POST['token'])) { return TRUE; }
         // invalid token...
         header('HTTP/1.1 401 Unauthorized', TRUE, 401);
-        $this->errorPage('Invalid security token', 'The received token was empty or invalid.');
+        $this->errorPage('Invalid security token', 'The received token was empty or invalid. <br />Are you sure that <em>Cookies</em> are enabled on your browser?');
         return FALSE;
     }
     

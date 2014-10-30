@@ -35,8 +35,8 @@ if (Config::Get('debug')) {
 $app = new Application();
 
 $navbar = new Menu();
-$navbar->item($app->URL(), 'Home')
-       ->item($app->URL('share'), 'Share Mood')
+$navbar->item($app->URL(), 'Share')
+       ->item($app->URL('review'), 'Review')
        ->item($app->URL('details'), 'Details');
 
 $navbar_right = new Menu();
