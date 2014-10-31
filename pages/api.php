@@ -20,11 +20,11 @@ use Picker\API;
 use Utils\Cookie;
 use Utils\TextHelper;
 
-$api = new API();
-
 switch($this->request(1)) {
 
     case substr(API::API_PATH, 4):
+
+        $api = new API();
         switch ($this->request(2)) {
 
             case 'version':
