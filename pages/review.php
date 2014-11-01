@@ -22,62 +22,51 @@ use Utils\Session;
 use Utils\Cookie;
 use Utils\TextHelper;
 
-$moods = Mood::DayMoods();
-$bads = array();
-$goods = array();
-foreach ($moods as $m) {
-    if ($m->getMood() == MoodLevel::GOOD)
-        $goods[] = $m;
-    else
-        $bads[] = $m;
-}
-
 // results of the day
-$this->assign('moods', $moods);
-if (count($moods) > 0) {
-    $this->assign('goods_percentage', count($goods) * 100 / count($moods));
-    $this->assign('bads_percentage', count($bads) * 100 / count($moods));
+$dayMoods = Mood::CountDayMoods();
+$dayBads = $dayMoods[MoodLevel::BAD];
+$dayGoods = $dayMoods[MoodLevel::GOOD];
+$dayCount = $dayMoods['count'];
+$this->assign('moods', $dayCount);
+if ($dayCount > 0) {
+    $this->assign('goods_percentage', $dayGoods * 100 / $dayCount);
+    $this->assign('bads_percentage', $dayBads * 100 / $dayCount);
     $s = "
     $(function(){
         var data = [
             {
-                value: ".count($bads).",
+                value: ".$dayBads.",
                 color: $('#color_picker .progress-bar-danger').css('background-color'),
                 label: 'Bad Mood'
             },
             {
-                value: ".count($goods).",
+                value: ".$dayGoods.",
                 color: $('#color_picker .progress-bar-success').css('background-color'),
                 label: 'Good Mood'
             }
         ]; 
-    ";
-    if (count($moods) > 0) {
-        $s .= "
-            new Chart(document.getElementById('dayChart').getContext('2d')).Doughnut(data, { 
-                animation: true, animationEasing: 'linear', animationSteps: 25,
-                tooltipFontFamily: $('body').css('font-family'),
-                tooltipFontSize: 12,
-                segmentShowStroke: false,
-                percentageInnerCutout : 60
-            });
-        ";
-    }
-    $s .= "});";
+        new Chart(document.getElementById('dayChart').getContext('2d')).Doughnut(data, { 
+            animation: true, animationEasing: 'linear', animationSteps: 25,
+            tooltipFontFamily: $('body').css('font-family'),
+            tooltipFontSize: 12,
+            segmentShowStroke: false,
+            percentageInnerCutout : 60
+        });
+    });";
     $this->register('script', TextHelper::removeLineBreak($s));
 }
 
 // stats of the month
-$month = Mood::CountMonthMoods();
-$month_goods = Mood::CountMonthMoods(NULL, NULL, MoodLevel::GOOD);
-$month_bads = $month - $month_goods;
-if (empty($month)) { $month = 1; }
-$this->assign('month_goods_percentage', $month_goods * 100 / $month);
-$this->assign('month_bads_percentage', $month_bads * 100 / $month);
-$this->assign('month_goods', $month_goods);
-$this->assign('month_bads', $month_bads);
+$monthMoods = Mood::CountMonthMoods();
+$monthGoods = $monthMoods[MoodLevel::GOOD];
+$monthBads = $monthMoods[MoodLevel::BAD];
+$monthCount = max(1, $monthBads+$monthGoods);
+$this->assign('month_goods_percentage', $monthGoods * 100 / $monthCount);
+$this->assign('month_bads_percentage', $monthBads * 100 / $monthCount);
+$this->assign('month_goods', $monthGoods);
+$this->assign('month_bads', $monthBads);
 
 // javascript dependancy
-$this->register('script_file', 'chart.min.js');
+if ($dayCount > 0) { $this->register('script_file', 'chart.min.js'); }
 
 ?>

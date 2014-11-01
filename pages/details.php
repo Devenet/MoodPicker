@@ -49,9 +49,10 @@ $(function() {
 ";
 
 // year stats
-$year_nb_moods = Mood::CountYearMoods($year);
-$year_nb_goods = Mood::CountYearMoods($year, MoodLevel::GOOD);
-$year_nb_bads = $year_nb_moods - $year_nb_goods;
+$year_moods = Mood::CountYearMoods($year);
+$year_nb_moods = $year_moods['count'];
+$year_nb_goods = $year_moods[MoodLevel::GOOD];
+$year_nb_bads = $year_moods[MoodLevel::BAD];
 if (empty($year_nb_moods)) { $year_nb_moods = 1; }
 $this->assign('year_goods_percentage', $year_nb_goods * 100 / $year_nb_moods);
 $this->assign('year_bads_percentage', $year_nb_bads * 100 / $year_nb_moods);
@@ -63,9 +64,10 @@ $monthsAvailable = Mood::MonthsAvailable($year);
 $months = array();
 $monthsGraph = array();
 foreach ($monthsAvailable as $m) {
-    $t = Mood::CountMonthMoods($m, $year);
-    $tg = Mood::CountMonthMoods($m, $year, MoodLevel::GOOD);
-    $tb = $t - $tg;
+    $monthMoods = Mood::CountMonthMoods($m, $year);
+    $t = $monthMoods['count'];
+    $tg = $monthMoods[MoodLevel::GOOD];
+    $tb = $monthMoods[MoodLevel::BAD];
     $months[$m] = array(
         'total' => $t,
         'goods' => $tg,
@@ -135,8 +137,8 @@ $(function() {
             modal.html('Still loading&hellip;');
             setTimeout(function() {
                 modal.html('Still loading all the amazing data&hellip;');
-            }, 4000);
-        }, 2000);
+            }, 2000);
+        }, 1000);
     });
 });"));
 
