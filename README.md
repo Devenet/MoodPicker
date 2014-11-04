@@ -29,9 +29,8 @@ Otherwise you can download the last version on the [releases page](https://githu
 
 #### Other path URL
 
-If the webapp is not stored in the `moods` folder on your root web server folder, you have to do one more step. Let's assume you have installed MoodPicker in `apps/mymood` and you also browse it under `http://mywebsite.tld/apps/mymood`: 
-
-* Edit the `.htaccess` file and update the two following lines:
+If the webapp is not stored in the `moods` folder on your root web server folder, you have to do one more step.
+Let's assume you have installed MoodPicker in `apps/mymood` and you also browse it under `http://mywebsite.tld/apps/mymood`; just edit the `.htaccess` file and update the two following lines:
 ```
 # Replace /moods/ with your path in the 2 following lines
 RewriteBase /apps/mymood/
@@ -55,9 +54,7 @@ First create a `config.php` file ont the root folder of the apps, and then edit 
 
 ```php
 $_CONFIG = array(
-    // full URL or path where the website is hosted
-    'url' => '/moods',
-    
+
     // name of the application
     'name' => 'Mood Picker',
     // title used in address bar
