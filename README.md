@@ -25,29 +25,17 @@ git clone https://github.com/nicolabricot/MoodPicker moods
 
 Otherwise you can download the last version on the [releases page](https://github.com/nicolabricot/MoodPicker/releases), and unzip it as a `moods` folder into your web server root folder.
 
-### Setup the config file
 
-Just copy the `config.default.php` file into `config.php`.
-
-```sh
-cp config.default.php config.php
-```
-
-That's it.
 
 #### Other path URL
 
-If the webapp is not stored in the `moods` folder on your root web server folder, you have to do two more steps. Let's assume you have installed MoodPicker in `apps/mymood` and you browse it under `http://mywebsite.tld/apps/mymood`. 
+If the webapp is not stored in the `moods` folder on your root web server folder, you have to do one more step. Let's assume you have installed MoodPicker in `apps/mymood` and you also browse it under `http://mywebsite.tld/apps/mymood`: 
 
-1) Edit the `config.php` file to update the URL setting:
-```php
-'url' => '/apps/mymood'
-```
-2) Edit the `.htaccess` file and update the two following lines:
+* Edit the `.htaccess` file and update the two following lines:
 ```
 # Replace /moods/ with your path in the 2 following lines
 RewriteBase /apps/mymood/
-ErrorDocument 403 /apps/mymood//index.php?page=404
+ErrorDocument 403 /apps/mymood/index.php?page=404
 ```
 
 #### Writable data directory
@@ -61,7 +49,9 @@ chown www-data -R moods/data
 ## Customization
 
 There are few options to customize your Mood Picker.
-Just edit and update your `config.php` file.
+
+First create a `config.php` file ont the root folder of the apps, and then edit it.
+
 
 ```php
 $_CONFIG = array(

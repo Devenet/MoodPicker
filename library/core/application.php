@@ -64,7 +64,7 @@ final class Application {
         $this->page = empty($this->request[0]) ? 'index' : str_replace("\0", '', htmlspecialchars($this->request[0]));
         $this->fake_page = NULL;
         
-        $this->url = trim(Config::Get('url')) . (mb_substr(Config::Get('url'), -1) == '/' ? '' : '/');
+        $this->url = mb_substr($_SERVER['SCRIPT_NAME'], 0, mb_strlen($_SERVER['SCRIPT_NAME'])-9);
         $this->template->assign('URL', $this->url);
 
         $this->checkTheme();
