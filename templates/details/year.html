@@ -6,7 +6,13 @@
 <body class="details">
 	{include="../inc/navbar"}
 
-	<div class="container">
+	<div class="container espace-bottom">
+        <ol class="breadcrumb espace-bottom">
+            <li><a href="{$URL}">{$app_name}</a></li>
+            <li><a href="{$URL}details">Details</a></li>
+            <li class="active">{$year}</li>
+        </ol>
+
 	    <div class="page-header no-espace-top">
 	        {if="count($years) > 1"}
             <div class="btn-group pull-right">

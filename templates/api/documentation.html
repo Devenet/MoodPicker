@@ -16,14 +16,20 @@
 	{include="../inc/navbar"}
     
     {if="isset($displayNotice)"}
-    <div class="bg-warning" style="margin-top: -21px;">
+    <div class="bg-warning" style="margin-top: -21px; margin-bottom: 21px;">
 	    <div class="container text-center">
-	        <p style="margin: 15px auto;">To register an account and get your API credentials, please contact the webmaster. <button type="button" class="btn btn-default btn-xs" onclick="$.cookie('mood_picker_notice_apidoc', 1, { expires: 1, path: '/' }); $(this).parent().parent().slideUp(); return false;">Close</button></p>
+	        <p style="margin: 15px auto;">To register an account and get your API credentials, please contact the webmaster. <button type="button" class="btn btn-default btn-xs" onclick="$.cookie('mood_picker_notice_apidoc', 1, { expires: 1, path: '/' }); $(this).parent().slideUp(); return false;">Close</button></p>
 	    </div>
 	</div>
     {/if}
     
 	<div class="container">
+        <ol class="breadcrumb espace-bottom">
+            <li><a href="{$URL}">{$app_name}</a></li>
+            <li><a href="{$URL}api">API</a></li>
+            <li class="active">Documentation</li>
+        </ol>
+
 	    <div class="page-header no-espace-top espace-bottom">
 	        <h1>Documentation <small>API {$app_api_version}</small></h1>
 	    </div>
