@@ -26,7 +26,6 @@ use Core\Config;
 class API extends \Core\API {
     
     const VERSION = '1.1.0';
-    const TOKENS_FILE = 'api_tokens';
 
     const API_PATH = "api/v1";
     
@@ -40,16 +39,16 @@ class API extends \Core\API {
     const P_TOKEN = 'token';
     const P_MOOD = 'mood';
 
-    const DB_TOKENS = 'api_tokens';
-    private $db_tokens;
+    const DB_API = 'mood_api';
+    private $db_api;
 
     public function __construct() {
-        $this->db_tokens = SQLite::Instance(self::DB_TOKENS);
+        $this->db_api = SQLite::Instance(self::DB_API);
     }
     
     protected function getTokens() {
         $tokens = array();
-        $query = $this->db_tokens->query('SELECT id, token, expire from api_tokens');
+        $query = $this->db_api->query('SELECT id, token, expire from tokens');
         while ($data = $query->fetch())
             $tokens[] = array( 'token' => $data['token'], 'expire' => $data['expire'], 'id' => $data['id'] );
         $query->closeCursor();
@@ -66,7 +65,7 @@ class API extends \Core\API {
             'expire' => time() + 60*10
         );
         
-        $query = $this->db_tokens->prepare('INSERT INTO api_tokens(token, expire) VALUES (:token, :expire)');
+        $query = $this->db_api->prepare('INSERT INTO tokens(token, expire) VALUES (:token, :expire)');
         $query->execute(array(
             'token' => $token['token'],
             'expire' => $token['expire']
@@ -77,7 +76,7 @@ class API extends \Core\API {
     }
     private function acceptToken($token) {
         $tokens = $this->getTokens();
-        $query = $this->db_tokens->prepare('DELETE FROM api_tokens WHERE id = :id');
+        $query = $this->db_api->prepare('DELETE FROM tokens WHERE id = :id');
         $activeTokens = array();
 
         //remove expired tokens

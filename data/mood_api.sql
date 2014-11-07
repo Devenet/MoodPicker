@@ -1,0 +1,19 @@
+CREATE TABLE `tokens` (
+    `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    `token` TEXT NOT NULL,
+    `expire` INTEGER NOT NULL
+);
+
+CREATE TABLE `credentials` (
+	`id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	`key` TEXT NOT NULL,
+	`token` TEXT NOT NULL,
+	`name` TEXT NOT NULL
+);
+
+CREATE TABLE `access` (
+	`id_credential` INTEGER PRIMARY KEY,
+	`count` INTEGER DEFAULT 0,
+	`last_timestamp` INTEGER NOT NULL,
+	`last_ip` TEXT DEFAULT '0.0.0.0'
+);
