@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+<head>
+	{include="../inc/head"}
+</head>
+<body class="details">
+	{include="../inc/navbar"}
+
+	<div class="container espace-bottom">
+        <ol class="breadcrumb espace-bottom">
+            <li><a href="{$URL}">{$app_name}</a></li>
+            <li><a href="{$URL}details">Details</a></li>
+            <li><a href="{$URL}details/{$year}">{$year}</a></li>
+            <li class="active">{$month_txt}</li>
+        </ol>
+
+
+	    <div class="page-header no-espace-top">
+	        {if="count($months) > 1"}
+            <div class="btn-group pull-right">
+                <button type="button" class="btn btn-default" data-toggle="dropdown">Months</button>
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    {loop="$months"}<li><a href="{$URL}details/{$year}/{$value}" class="details-month">{if="$month == $value"}<span class="strong">{$month_txt}</span>{else}{function="date('F', mktime(0, 0, 0, $value, 1))"}{/if}</a></li>{/loop}
+                </ul>
+            </div>
+            {/if}
+            <h1>{$month_txt} {$year} <small>Review</small></h1>
+	    </div>
+	</div>
+	
+    <div class="container espace-bottom">
+        <div class="progress month-moods">
+            <div class="progress-bar progress-bar-success tip" data-title="Good Mood: {$month_goods}" data-placement="top" style="width: {$month_goods_percentage}%"></div>
+            <div class="progress-bar progress-bar-danger tip" data-title="Bad Mood: {$month_bads}" data-placement="top" style="width: {$month_bads_percentage}%"></div>
+        </div>
+        <div class="row lead">
+            <div class="col-md-4 col-sm-4 col-xs-4 text-center"><span class="espace-right-sm"><span class="glyphicon glyphicon-user"></span></span> {$month_goods+$month_bads}</div>
+            <div class="col-md-4 col-sm-4 col-xs-4 text-center"><span class="espace-right-sm"><span class="glyphicon glyphicon-thumbs-up text-success"></span></span> {$month_goods_percentage|round:1}%</div>
+            <div class="col-md-4 col-sm-4 col-xs-4 text-center"><span class="espace-right-sm"><span class="glyphicon glyphicon-thumbs-down text-danger"></span></span> {$month_bads_percentage|round:1}%</div>
+        </div>
+        <!--
+        <div class="row espace-bottom">
+            <div class="col-md-8 col-md-offset-2">
+                <h3>Global review <small>{$month_txt}</small></h3>
+                <canvas id="chartMonth" width="500" height="200"  class="center-block"></canvas>
+            </div>
+        </div>
+        -->
+    </div>
+
+
+
+	
+    
+    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="loadingModal" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content text-center" id="loadingModal">
+                Loading&hellip;
+            </div>
+        </div>
+    </div>
+    
+    {include="../inc/footer"}
+    {include="../inc/colorpicker"}
+	{include="../inc/script"}
+</body>
+</html>

@@ -66,6 +66,17 @@ if (! is_null($month)) {
     $this->assign('month', $month);
     $this->assign('month_txt', date('F', mktime(0, 0, 0, $month, 1)));
 
+    // current month stats
+    $month_moods = Mood::CountMonthMoods($month, $year);
+    $month_nb_moods = $month_moods['count'];
+    $month_nb_goods = $month_moods[MoodLevel::GOOD];
+    $month_nb_bads = $month_moods[MoodLevel::BAD];
+    if (empty($month_nb_moods)) { $month_nb_moods = 1; }
+    $this->assign('month_goods_percentage', $month_nb_goods * 100 / $month_nb_moods);
+    $this->assign('month_bads_percentage', $month_nb_bads * 100 / $month_nb_moods);
+    $this->assign('month_goods', $month_nb_goods);
+    $this->assign('month_bads', $month_nb_bads);
+
 
 }
 // year details page

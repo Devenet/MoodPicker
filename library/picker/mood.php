@@ -181,7 +181,7 @@ class Mood {
     
     // count month moods
     static public function CountMonthMoods($month = NULL, $year = NULL) {
-        $month = is_null($month) ? date('m') : $month;
+        $month = is_null($month) ? date('m') : date('m', mktime(0, 0, 0, $month, 1));
         $year = is_null($year) ? date('Y') : $year;
         $db = SQLite::Instance();
         $query = $db->prepare("SELECT mood_level, COUNT(*) AS count FROM mood WHERE strftime('%Y%m', timestamp, 'unixepoch', 'localtime') = :date GROUP BY mood_level ORDER BY mood_level");
