@@ -1,5 +1,0 @@
-CREATE TABLE `api_tokens` (
-    `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    `token` TEXT NOT NULL,
-    `expire` INTEGER NOT NULL
-);
