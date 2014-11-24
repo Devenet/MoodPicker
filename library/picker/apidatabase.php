@@ -27,50 +27,47 @@ class ApiDataBase {
     const TOKEN_EXPIRATION = 600;  
 
     private $db;
-
-    protected $id_credential = NULL;
     
     public function __construct() {
         $this->db = SQLite::Instance(self::DB_API);
     }
 
     public function acceptCredentials($key, $token) {
-        $query = $this->db->query('SELECT id, key, token from credentials');
-        $result = FALSE;
+        $q = $this->db->prepare('SELECT id from credentials WHERE api_key = :key AND api_token = :token');
+        $q->execute(array(
+            'key' => $key,
+            'token' => $token
+        ));
+        $data = $q->fetch();
+        $q->closeCursor();
 
-        while ($data = $query->fetch()) {
-            if ($data['key'] == $key && $data['token'] == $token) {
-                $result = TRUE;
-                $this->id_credential = $data['id'];
-                break;
-            }
+        if ($data !== false) {
+            $q = $this->db->prepare('UPDATE credentials SET last_timestamp = :now, last_ip = :ip, count = count + 1 WHERE id = :id');
+            $q->execute(array(
+                'id' => $data['id'],
+                'now' => time(),
+                'ip' => $_SERVER['REMOTE_ADDR']
+            ));
+            $q->closeCursor();
         }
-        $query->closeCursor();
-        return $result;
+
+        return (bool) $data;
     }
 
 
-    public function generateToken() {
+    public function generateToken($api_key) {
         $token = array(
             'token' => sha1(uniqid('', TRUE). '_' .mt_rand()),
             'expire' => time() + self::TOKEN_EXPIRATION
         );
         
-        $query = $this->db_api->prepare('INSERT INTO tokens(token, expire) VALUES (:token, :expire)');
-        $query->execute(array(
+        $q = $this->db->prepare('INSERT INTO tokens(token, expire, api_key) VALUES (:token, :expire, :api)');
+        $q->execute(array(
             'token' => $token['token'],
-            'expire' => $token['expire']
+            'expire' => $token['expire'],
+            'api' => $api_key
         ));
-        $query->closeCursor();
-        if (!is_null($this->id_credential)) {
-            $query = $this->db_api->prepare('UPDATE credentials SET last_timestamp = :now, last_ip = :ip, WHERE id = :id');
-            $query->execute(array(
-                'id' => $this->id_credential,
-                'last_timestamp' => time(),
-                'last_ip' => $_SERVER['REMOTE_ADDR']
-            ));
-            $query->closeCursor();
-        }
+        $q->closeCursor();
         return $token;
     }
 
@@ -85,25 +82,32 @@ class ApiDataBase {
     }
 
 
-
     public function acceptToken($token) {
-        $tokens = $this->getTokens();
-        $query = $this->db->prepare('DELETE FROM tokens WHERE id = :id');
-        $activeTokens = array();
+        // remove expired tokens
+        $q = $this->db->prepare('DELETE FROM tokens WHERE expire < :now');
+        $q->execute(array(
+            'now' => time()
+        ));
+        $q->closeCursor();
 
-        //remove expired tokens
-        for ($i=0; $i<count($tokens); $i++) {
-            if (time() > $tokens[$i]['expire']) { $query->execute(array( 'id' => $tokens[$i]['id'] )); }
-            else { $activeTokens[] = $tokens[$i]['token']; } 
+        // retrieve token data
+        $q = $this->db->prepare('SELECT id from tokens WHERE token = :token');
+        $q->execute(array(
+            'token' => $token
+        ));
+        $data = $q->fetch();
+        $q->closeCursor();
+
+        // remove if accepted
+        if ($data !== false) {
+            $q = $this->db->prepare('DELETE FROM tokens WHERE id = :id');
+            $q->execute(array(
+                'id' => $data['id'],
+            ));
+            $q->closeCursor();
         }
 
-        $position = array_search($token, $activeTokens);
-        $found = $position >= 0 && $position !== FALSE;
-        // if accepted remove it
-        if ($found) { $query->execute(array( 'id' => $tokens[$position]['id'] )); }
-        $query->closeCursor();
-
-        return $found;
+        return (bool) $data;
     }
 
 

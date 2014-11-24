@@ -39,69 +39,16 @@ class API extends \Core\API {
     const P_TOKEN = 'token';
     const P_MOOD = 'mood';
 
-    const DB_API = 'mood_api';
     private $db_api;
 
     public function __construct() {
-        $this->db_api = SQLite::Instance(self::DB_API);
+        $this->db_api = new ApiDataBase();
     }
     
-    protected function getTokens() {
-        $tokens = array();
-        $query = $this->db_api->query('SELECT id, token, expire from tokens');
-        while ($data = $query->fetch())
-            $tokens[] = array( 'token' => $data['token'], 'expire' => $data['expire'], 'id' => $data['id'] );
-        $query->closeCursor();
-        return $tokens;
-    }
     protected function checkToken($data) {
         if (! isset($data[self::P_TOKEN])) { $this->error(401, 'Bad token'); }
-        if (! $this->acceptToken($data[self::P_TOKEN])) { $this->error(401, 'Bad token'); }
+        if (! $this->db_api->acceptToken($data[self::P_TOKEN])) { $this->error(401, 'Bad token'); }
     }
-    private function generateToken() {
-        // 10 min before token expiration
-        $token = array(
-            'token' => sha1(uniqid('', TRUE). '_' .mt_rand()),
-            'expire' => time() + 60*10
-        );
-        
-        $query = $this->db_api->prepare('INSERT INTO tokens(token, expire) VALUES (:token, :expire)');
-        $query->execute(array(
-            'token' => $token['token'],
-            'expire' => $token['expire']
-        ));
-        $query->closeCursor();
-
-        return $token;
-    }
-    private function acceptToken($token) {
-        $tokens = $this->getTokens();
-        $query = $this->db_api->prepare('DELETE FROM tokens WHERE id = :id');
-        $activeTokens = array();
-
-        //remove expired tokens
-        for ($i=0; $i<count($tokens); $i++) {
-            if (time() > $tokens[$i]['expire']) { $query->execute(array( 'id' => $tokens[$i]['id'] )); }
-            else { $activeTokens[] = $tokens[$i]['token']; } 
-        }
-
-        $position = array_search($token, $activeTokens);
-        $found = $position >= 0 && $position !== FALSE;
-        // if accepted remove it
-        if ($found) { $query->execute(array( 'id' => $tokens[$position]['id'] )); }
-        $query->closeCursor();
-
-        return $found;
-    }
-    private function acceptCredentials($key, $token) {
-        foreach (Config::Get('api') as $credential) {
-            if ($credential['key'] == $key && $credential['token'] == $token) {
-                return true;
-            }
-        }
-        return false;
-    }
-
 
     /* API RESPONSES */
 
@@ -113,9 +60,9 @@ class API extends \Core\API {
             if (! isset($data[self::P_API_KEY]) || empty($data[self::P_API_KEY])) { $this->error(422, self::E_EMPTY_DATA); }
             if (! isset($data[self::P_API_TOKEN]) || empty($data[self::P_API_TOKEN])) { $this->error(422, self::E_EMPTY_DATA); }
 
-            if (! $this->acceptCredentials($data[self::P_API_KEY], $data[self::P_API_TOKEN])) { $this->error(401, 'Bad credentials'); }
+            if (! $this->db_api->acceptCredentials($data[self::P_API_KEY], $data[self::P_API_TOKEN])) { $this->error(401, 'Bad credentials'); }
 
-            $token = $this->generateToken();
+            $token = $this->db_api->generateToken($data[self::P_API_KEY]);
             $this->data['token'] = $token['token'];
             $this->data['expire'] = $token['expire'];
 
@@ -134,7 +81,7 @@ class API extends \Core\API {
             if (! isset($data[self::P_API_KEY]) || empty($data[self::P_API_KEY])) { $this->error(422, self::E_EMPTY_DATA); }
             if (! isset($data[self::P_API_TOKEN]) || empty($data[self::P_API_TOKEN])) { $this->error(422, self::E_EMPTY_DATA); }
 
-            if (! $this->acceptCredentials($data[self::P_API_KEY], $data[self::P_API_TOKEN])) { $this->error(401, 'Bad credentials'); }
+            if (! $this->db_api->acceptCredentials($data[self::P_API_KEY], $data[self::P_API_TOKEN])) { $this->error(401, 'Bad credentials'); }
 
             $this->data['authentification'] = true;
 
