@@ -17,6 +17,7 @@ Code source hosted on https://github.com/nicolabricot/MoodPicker
 */
 
 use Picker\API;
+use Manage\ApiRequest;
 use Utils\Cookie;
 use Utils\TextHelper;
 
@@ -57,7 +58,7 @@ switch($this->request(1)) {
                 break;
 
             default:
-            $api->error(400);
+                $api->error(400);
         }
         break;
 
@@ -71,6 +72,47 @@ switch($this->request(1)) {
         }
         break;
 
+    case 'request':
+        $this->fakePage('api');
+
+        switch ($this->request(2)) {
+            case 'sent':
+                $this->page('api/request_sent');
+                break;
+
+            case NULL:
+            default:
+                $this->page('api/request');
+                $this->fakePage('api');
+
+                if (!empty($_POST)) {
+                    try {
+                        $this->assign('form_data', array(
+                            'email' => htmlspecialchars($_POST['email']),
+                            'agree' => !empty($_POST['agree']) && $_POST['agree'] == 'on'
+                        ));
+
+                        if (empty($_POST['email']) || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL))
+                            throw new \Exception('Please enter a valid email address.');
+                        if (empty($_POST['agree']) || $_POST['agree'] != 'on')
+                            throw new \Exception('You have to agree to a fair-use of the API.');
+
+                        $req = new ApiRequest();
+                        $req->setEmail(htmlspecialchars($_POST['email']));
+
+                        $result = $req->create();
+                        if (!$result)
+                            throw new Exception('Unable to create your request. Please contact the webmaster.');
+
+                        header('Location: '.$this->URL('api/request/sent'));
+                        exit();
+                    }
+                    catch (\Exception $e) {
+                        $this->assign('form_error', $e->getMessage());
+                    }
+                }
+        }
+        break;
 
     case NULL:
     default:

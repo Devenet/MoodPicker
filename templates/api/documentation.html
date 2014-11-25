@@ -18,7 +18,7 @@
     {if="isset($displayNotice)"}
     <div class="bg-warning" style="margin-top: -21px; margin-bottom: 21px;">
 	    <div class="container text-center">
-	        <p style="margin: 15px auto;">To register an account and get your API credentials, please contact the webmaster. <button type="button" class="btn btn-default btn-xs" onclick="$.cookie('mood_picker_notice_apidoc', 1, { expires: 1, path: '/' }); $(this).parent().slideUp(); return false;">Close</button></p>
+	        <p style="margin: 15px auto;">To register an account and get your API credentials, please <a href="{$URL}api/request">make a request</a>. <button type="button" class="btn btn-default btn-xs" onclick="$.cookie('mood_picker_notice_apidoc', 1, { expires: 1, path: '/' }); $(this).parent().slideUp(); return false;">Close</button></p>
 	    </div>
 	</div>
     {/if}
@@ -56,6 +56,8 @@
                 <div class="panel panel-info"><div class="panel-body"><strong>Data policy:</strong> Data from the API of Mood Picker are for <strong>internal usage only</strong>. If you want to use it externaly, please contact your manager and ask for a written authorization to reuse data outsite the corporation.</div></div>
                 -->
                 <p>The API is available under <kbd>{$_SERVER['SERVER_NAME']}{$URL}{$api_path}</kbd>.</p>
+
+                <p class="espace-top">To register an account and get your API credentials, please <a href="{$URL}api/request">make a request</a>.</p>
                 
                 <h2 id="errors">Errors</h2>
 	            <p>If the API is unable to respond to your request, an error (based on HTTP protocol) will be returned.</p>
