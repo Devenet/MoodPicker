@@ -47,7 +47,7 @@ class ApiDataBase {
             $q->execute(array(
                 'id' => $data['id'],
                 'now' => time(),
-                'ip' => Config::IP();
+                'ip' => Config::IP()
             ));
             $q->closeCursor();
         }
