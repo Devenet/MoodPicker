@@ -86,6 +86,7 @@ switch($this->request(1)) {
 
             case NULL:
                 if (!empty($_POST)) {
+                    $this->acceptToken();
                     try {
                         $this->assign('form_data', array(
                             'email' => htmlspecialchars($_POST['email']),
@@ -111,6 +112,7 @@ switch($this->request(1)) {
                         $this->assign('form_error', $e->getMessage());
                     }
                 }
+                $this->getToken();
                 $this->page('api/request');
                 break;
         }
