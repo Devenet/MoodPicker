@@ -68,6 +68,14 @@ abstract class Config {
         return dirname(__FILE__).'/../../'.$filename;
     }
 
+    static public function IP() {
+        $ip = $_SERVER["REMOTE_ADDR"];
+        // Then we use more HTTP headers to prevent session hijacking from users behind the same proxy
+        if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) { $ip=$ip.'_'.$_SERVER['HTTP_X_FORWARDED_FOR']; }
+        if (isset($_SERVER['HTTP_CLIENT_IP'])) { $ip=$ip.'_'.$_SERVER['HTTP_CLIENT_IP']; }
+        return htmlspecialchars($ip);
+    }
+
 }
 
 ?>

@@ -23,6 +23,7 @@ spl_autoload_register();
 use Core\Application;
 use Core\Config;
 use Utils\Menu;
+use Manage\Setting;
 
 if (Config::Get('debug')) {
     error_reporting(-1);
@@ -46,7 +47,7 @@ $dropdown->item($app->URL('api'), 'API')
          ->item($app->URL('settings'), 'Settings');
 $navbar_right->dropdown($dropdown, 'More');
 /*/
-$navbar_right->item($app->URL('api'), 'API');
+if ((new Setting('api_display_doc'))->getValue()) { $navbar_right->item($app->URL('api'), 'API'); }
 
 $app->register(Menu::NAVBAR, $navbar);
 $app->register(Menu::NAVBAR_RIGHT, $navbar_right);

@@ -183,7 +183,7 @@ class API extends \Core\API {
             if (! isset($data[self::P_MOOD]) || empty($data[self::P_MOOD])) { $this->error(422, self::E_EMPTY_MOOD); }
             if (! MoodLevel::isValidValue($data[self::P_MOOD]+0)) { $this->error(422, self::E_FORMAT_MOOD); }
             
-            $m = new Mood($data[self::P_MOOD] , time(), $_SERVER['REMOTE_ADDR']);
+            $m = new Mood($data[self::P_MOOD] , time(), Config::IP());
             $m->save();
 
             $this->data['mood'] = $m->getMood();

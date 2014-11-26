@@ -19,6 +19,7 @@ Code source hosted on https://github.com/nicolabricot/MoodPicker
 namespace Picker;
 
 use DataBase\SQLite;
+use Core\Config;
 
 class ApiDataBase {
 
@@ -46,7 +47,7 @@ class ApiDataBase {
             $q->execute(array(
                 'id' => $data['id'],
                 'now' => time(),
-                'ip' => $_SERVER['REMOTE_ADDR']
+                'ip' => Config::IP();
             ));
             $q->closeCursor();
         }

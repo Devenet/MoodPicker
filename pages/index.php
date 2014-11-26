@@ -20,6 +20,7 @@ use Utils\Cookie;
 use Utils\Session;
 use Picker\Mood;
 use Picker\MoodLevel;
+use Core\Config;
 
 if (isset($_POST['mood']) && $this->acceptToken()) {
     $_POST['mood'] = $_POST['mood']+0;
@@ -28,7 +29,7 @@ if (isset($_POST['mood']) && $this->acceptToken()) {
         $this->errorPage('Invalid value', 'The given value for your current mood is unknow.');
     
     if (!Cookie::Exists('voted') && !Session::Exists('voted')) {
-        $m = new Mood($_POST['mood'] , time(), $_SERVER['REMOTE_ADDR']);
+        $m = new Mood($_POST['mood'] , time(), Config::IP());
         $m->save();
         Cookie::add('voted', true, Cookie::HOUR*2);
         Session::add('voted', true);

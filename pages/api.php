@@ -18,6 +18,7 @@ Code source hosted on https://github.com/nicolabricot/MoodPicker
 
 use Picker\API;
 use Manage\ApiRequest;
+use Manage\Setting;
 use Utils\Cookie;
 use Utils\TextHelper;
 
@@ -63,9 +64,11 @@ switch($this->request(1)) {
         break;
 
     case 'documentation':
+        if (! (new Setting('api_display_doc'))->getValue()) { break; }
         $this->page('api/documentation');
         $this->fakePage('api');
         $this->assign('api_path', API::API_PATH);
+        $this->assign('api_request', (new Setting('api_request'))->getValue());
         if (! Cookie::Exists('notice_apidoc')) {
             $this->assign('displayNotice', TRUE);
             $this->register('script_file', 'cookie.min.js');
@@ -73,18 +76,15 @@ switch($this->request(1)) {
         break;
 
     case 'request':
-        $this->fakePage('api');
+        if (! (new Setting('api_request'))->getValue()) { break; }
 
+        $this->fakePage('api');
         switch ($this->request(2)) {
             case 'sent':
                 $this->page('api/request_sent');
                 break;
 
             case NULL:
-            default:
-                $this->page('api/request');
-                $this->fakePage('api');
-
                 if (!empty($_POST)) {
                     try {
                         $this->assign('form_data', array(
@@ -111,13 +111,15 @@ switch($this->request(1)) {
                         $this->assign('form_error', $e->getMessage());
                     }
                 }
+                $this->page('api/request');
+                break;
         }
         break;
 
     case NULL:
-    default:
         header('Location: '.$this->URL('api/documentation'));
         exit();
+        break;
 }
 
 
