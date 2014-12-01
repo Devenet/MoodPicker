@@ -218,6 +218,22 @@ final class Application {
         $this->errorPage('Invalid security token', 'The received token was empty or invalid. <br />Are you sure that <em>Cookies</em> are enabled on your browser?');
         return FALSE;
     }
+
+    public function getExtendedToken() {
+        $token = Token::Generate(TRUE);
+        $this->template->assign('extended_token', $token);
+        return $token;
+    }
+    public function acceptExtendedToken($token) {
+        if (Token::AcceptExtended($token)) { return TRUE; }
+        // invalid token...
+        header('HTTP/1.1 401 Unauthorized', TRUE, 401);
+        $this->errorPage('Invalid security token', 'The received token was empty or invalid. <br />Are you sure that <em>Cookies</em> are enabled on your browser?');
+        return FALSE;
+    }
+    public function RemoveExtendedToken($token) {
+        Token::RemoveExtended($token); 
+    }
     
     // generic error page
     public function errorPage($title, $content) {

@@ -35,22 +35,21 @@ class User {
     protected $last_ip;
     protected $privilege;
 
-    public function __construct($email = NULL) {
+    public function __construct() {
         $this->db = SQLite::Instance(self::DB);
         $this->id = NULL;
+    }
 
-        if (!empty($email)) {
-            $this->email = $email;
-
-            $q = $this->db->prepare('SELECT id, last_login, last_ip FROM users WHERE email = :name');
-            $q->execute(array( 'name' => $name ));
-            $data = $q->fetch();
-            $q->closeCursor();
-
-            if (!empty($data['id'])) {
-                $this->id = $data['id'];
-                $this->value = $data['value'];
-            }
+    public function loadFromId($id) {
+        $q = $this->db->prepare('SELECT email, last_login, last_ip FROM users WHERE id = :id');
+        $q->execute(array( 'id' => $id ));
+        $data = $q->fetch();
+        $q->closeCursor();
+        if (!empty($data['email'])) {
+            $this->id = $id;
+            $this->email = $data['email'];
+            $this->last_login = $data['last_login'];
+            $this->last_ip = $data['last_ip'];
         }
     }
 
@@ -62,7 +61,7 @@ class User {
         return $this->id;
     }
     public function getEmail() {
-        return $this->name;
+        return $this->email;
     }
     public function getLastLogin() {
         return $this->last_login;
@@ -84,6 +83,13 @@ class User {
     public function setPassword($password) {
         if (empty($password) || mb_strlen($password) < self::PASSWORD_LENGTH) { return; }
         $this->password = password_hash($password, PASSWORD_DEFAULT);
+    }
+
+    public function hasStillUser() {
+        $q = $this->db->query('SELECT count(id) AS total FROM users');
+        $data = $q->fetch();
+        $q->closeCursor();
+        return $data['total'] > 1;
     }
 
     public function acceptCredential($email, $password) {
@@ -142,7 +148,7 @@ class User {
     }
 
     public function delete() {
-        if ($this->exists) {
+        if ($this->exists()) {
             $q = $this->db->prepare('DELETE FROM users WHERE id = :id');
             $row_updated = $q->execute(array( 'id' => $this->id ));
             $q->closeCursor();
