@@ -198,8 +198,11 @@ final class Application {
 			$this->template->draw($this->page);
 		}
 		catch (\Rain\Tpl\NotFoundException $ex) {
-            if (Config::Get('debug')) { echo $ex; }
-		    else { header('HTTP/1.1 404 Not Found', TRUE, 404); }
+            if (Config::Get('debug')) {
+                $tpl = $ex->getTrace()[0]['args'][0] == 404 ? htmlspecialchars($_GET['template']) : $ex->getTrace()[0]['args'][0];
+                $this->assign('exception', $tpl);
+            }
+		    header('HTTP/1.1 404 Not Found', TRUE, 404);
 		    $this->template->assign('navbar', $this->modules[Menu::NAVBAR]->generate('404'));
 			$this->template->draw('_404');
 		}

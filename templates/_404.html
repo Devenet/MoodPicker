@@ -21,6 +21,8 @@
                 </div>
             </div>
         </div>
+
+        {if="isset($exception)"}<div class="row espace"><pre class="col-md-8 col-md-offset-2">Template exception 'Rain\Tpl\NotFoundException' with message 'Template {$exception} not found!'</pre></div>{/if}
         
         <div class="row espace">
             <div class="col-md-8 col-md-offset-2">
