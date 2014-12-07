@@ -239,9 +239,10 @@ final class Application {
     }
     
     // generic error page
-    public function errorPage($title, $content) {
+    public function errorPage($title, $content, $shouldTryAgain = TRUE) {
         $this->template->assign('error_title', $title);
-        $this->template->assign('error_content', $content.'<div class="espace-top">Please <a href="'.$_SERVER['REQUEST_URI'].'">try again</a>.</div>');
+        $this->template->assign('error_content', $content.
+            ($shouldTryAgain ? '<div class="espace-top">Please <a href="'.$_SERVER['REQUEST_URI'].'">try again</a>.</div>' : ''));
         $this->page = '_error';
         $this->run();
         exit();
