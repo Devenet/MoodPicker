@@ -104,7 +104,7 @@ class Mood {
     
     // get moods from a specific month
     static public function MonthMoods($month = NULL, $year = NULL, $mood_level = NULL) {
-        $month = is_null($month) ? date('m') : $month;
+        $month = is_null($month) ? date('m') : date('m', mktime(0, 0, 0, $month, 1));
         $year = is_null($year) ? date('Y') : $year;
         $moods = array();
         $db = SQLite::Instance();

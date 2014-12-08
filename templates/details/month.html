@@ -41,19 +41,18 @@
             <div class="col-md-4 col-sm-4 col-xs-4 text-center"><span class="espace-right-sm"><span class="glyphicon glyphicon-thumbs-up text-success"></span></span> {$month_goods_percentage|round:1}%</div>
             <div class="col-md-4 col-sm-4 col-xs-4 text-center"><span class="espace-right-sm"><span class="glyphicon glyphicon-thumbs-down text-danger"></span></span> {$month_bads_percentage|round:1}%</div>
         </div>
-        <!--
+        
+        {if="1==1"}
         <div class="row espace-bottom">
             <div class="col-md-8 col-md-offset-2">
-                <h3>Global review <small>{$month_txt}</small></h3>
-                <canvas id="chartMonth" width="500" height="200"  class="center-block"></canvas>
+                <h3>Days review <small>{$month_txt}</small></h3>
+                <canvas id="chartMonth" width="800" height="600"  class="center-block"></canvas>
             </div>
         </div>
-        -->
+        {/if}
+        
     </div>
 
-
-
-	
     
     <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="loadingModal" aria-hidden="true">
         <div class="modal-dialog modal-sm">

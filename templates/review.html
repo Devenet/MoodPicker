@@ -44,7 +44,7 @@
 
     	
     	<div class="clearfix"></div>
-    	<h2 class="espace-top-lg">Month’s review <small>{function="date('F')"}</small></h2>
+    	<h2 class="espace-top-lg">Month’s review <small><a href="{$URL}details/{function="date('Y/m')"}">{function="date('F')"}</a></small></h2>
     	<div class="progress today-month-moods espace-top espace-bottom-lg">
             <div class="progress-bar progress-bar-success tip" data-title="Good Mood: {$month_goods}" data-placement="bottom" style="width: {$month_goods_percentage}%">
                 {if="$month_goods>0"}<span>{$month_goods_percentage|round:1}%</span>{/if}
