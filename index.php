@@ -48,6 +48,7 @@ $dropdown->item($app->URL('api'), 'API')
 $navbar_right->dropdown($dropdown, 'More');
 /*/
 if ((new Setting('api_display_doc'))->getValue()) { $navbar_right->item($app->URL('api'), 'API'); }
+else if ((new Setting('api_request'))->getValue()) { $navbar_right->item($app->URL('api/request'), 'API'); }
 
 $app->register(Menu::NAVBAR, $navbar);
 $app->register(Menu::NAVBAR_RIGHT, $navbar_right);
