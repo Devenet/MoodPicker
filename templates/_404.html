@@ -38,7 +38,7 @@
 	<script>
         $(function(){
             $('img.img-circle').css('cursor', 'pointer');
-            $('img.img-circle').on('click', function(){ $(this).attr('src', $(this).attr('src')+'?'+new Date().getTime()); });
+            $('img.img-circle').on('click', function(){ $(this).attr('src', $(this).attr('src').replace(/\?[0-9]+/, '')+'?'+new Date().getTime()); });
         });
 	</script>
 </body>
