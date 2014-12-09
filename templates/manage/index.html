@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+<head>
+    {include="../inc/head"}
+</head>
+<body class="index">
+    {include="../inc/navbar"}
+    
+    <div class="container">
+        <ol class="breadcrumb espace-bottom">
+            <li><a href="{$URL}">{$app_name}</a></li>
+            <li class="active">Manage</li>
+        </ol>
+
+        <div class="page-header no-espace-top espace-bottom">
+            <h1>Manage</h1>
+        </div>
+        
+        <ul class="nav nav-pills nav-justified espace">
+            <li><a href="{$URL}manage/api">API</a></li>
+            <li><a href="{$URL}manage/users">Users</a></li>
+            <li><a href="{$URL}manage/settings">Settings</a></li>
+        </ul>
+        
+    </div>
+    
+    {include="../inc/footer"}
+    {include="../inc/script"}
+</body>
+</html>
