@@ -10,7 +10,7 @@ CREATE TABLE `credentials` (
 	`api_key` TEXT NOT NULL,
 	`api_token` TEXT NOT NULL,
 	`api_name` TEXT NOT NULL,
-	`last_timestamp` INTEGER NOT NULL,
+	`last_timestamp` INTEGER NULL,
 	`last_ip` TEXT  DEFAULT '0.0.0.0',
 	`count` INTEGER DEFAULT 0
 );
