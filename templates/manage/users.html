@@ -14,7 +14,7 @@
         </ol>
 
         <div class="page-header no-espace-top espace-bottom">
-            <h1>Users <small>Manage</small>
+            <h1>Users
                 <span class="pull-right"><a href="{$URL}manage/users/add" class="btn btn-default"><span class="glyphicon glyphicon-plus-sign"></span> Add</a></span>
             </h1>
         </div>
@@ -24,7 +24,7 @@
         <table class="table table-striped table-hover table-responsive">
             <thead>
                 <tr>
-                    <th class="text-right">#</th>
+                    <th class="text-center">#</th>
                     <th>Email</th>
                     <th colspan="2">Last login</th>
                 </tr>
@@ -32,7 +32,7 @@
             <tbody>
                 {loop="$users"}
                 <tr>
-                    <td class="text-right">{$value.id}</td>
+                    <td class="text-center">{$value.id}</td>
                     <td>{$value.email} <a href="mailto:{$value.email}" rel="external" class="pull-left espace-right-sm"><span class="glyphicon glyphicon-envelope"></span></a></td>
                     <td>{if="!empty($value.last_login)"}{function="date('r', $value.last_login)"}{else}never{/if}</td>
                     <td class="text-center"><a href="{$URL}manage/users/delete/{$value.id}/{$extended_token}" class="btn btn-danger btn-xs btn-delete"> Delete</a></td>
