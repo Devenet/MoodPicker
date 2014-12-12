@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+<head>
+	{include="../inc/head"}
+</head>
+<body class="index">
+	{include="../inc/navbar"}
+    
+    <div class="container">
+        <ol class="breadcrumb espace-bottom">
+            <li><a href="{$URL}">{$app_name}</a></li>
+            <li><a href="{$URL}manage">Manage</a></li>
+            <li><a href="{$URL}manage/api">API</a></li>
+            <li class="active">Add</li>
+        </ol>
+
+        <div class="page-header no-espace-top espace-bottom">
+            <h1>Add <small>API</small></h1>
+        </div>
+
+        <form class="form-horizontal" role="form" method="post">
+            {if="isset($form_error)"}
+            <div class="alert alert-danger col-sm-8 col-sm-offset-2"><strong>Oups!</strong> {$form_error}</div>
+            <div class="clearfix"></div>
+            {/if}
+            <div class="form-group">
+                <label for="api_name" class="col-sm-2 control-label">Sweety name</label>
+                <div class="col-sm-8">
+                    <input type="api_name" class="form-control" name="api_name" id="api_name" placeholder="" {if="isset($form_data.api_name)"}value="{$form_data.api_name}"{/if} autofocus />
+                </div>
+            </div>
+            <div class="form-group espace-top-md">
+                <label for="api_key" class="col-sm-2 control-label">API key</label>
+                <div class="col-sm-8">
+                    <input type="api_key" class="form-control" name="api_key" id="api_key" placeholder="" {if="isset($form_data.api_key)"}value="{$form_data.api_key}"{/if} autofocus />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="api_token" class="col-sm-2 control-label">API token</label>
+                <div class="col-sm-8">
+                    <input type="api_token" class="form-control" name="api_token" id="api_token" placeholder="" {if="isset($form_data.api_token)"}value="{$form_data.api_token}"{/if} autofocus />
+                </div>
+            </div>
+            <input type="hidden" value="{$token}" name="token" />
+            <div class="form-group form-controls">
+                <div class="col-sm-offset-2 col-sm-8">
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+    
+    {include="../inc/footer"}
+	{include="../inc/script"}
+</body>
+</html>

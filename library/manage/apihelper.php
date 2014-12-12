@@ -92,6 +92,7 @@ class ApiHelper {
         $this->api_name = htmlspecialchars($name);
     }
     public function setApiKey($key) {
+        if (!$this->availableApiKey($key)) { return; }
         $this->api_key = htmlspecialchars($key);
     }
     public function setApiToken($token) {
@@ -135,8 +136,8 @@ class ApiHelper {
     public function delete() {
         if ($this->exists()) {
             // delete generated tokens first
-            $q = $this->db->prepare('DELETE FROM tokens WHERE api_id = :id');
-            $q->execute(array( 'id' => $this->id ));
+            $q = $this->db->prepare('DELETE FROM tokens WHERE api_key = :key');
+            $q->execute(array( 'key' => $this->api_key ));
             $q->closeCursor();
             // delete api credentials then
             $q = $this->db->prepare('DELETE FROM credentials WHERE id = :id');
