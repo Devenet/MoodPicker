@@ -30,7 +30,7 @@
                     <th class="text-center">#</th>
                     <th>Name</th>
                     <th>Last use</th>
-                    <th class="text-center">Counter</th>
+                    <th class="text-center">Access</th>
                     <th></th>
                 </tr>
             </thead>
@@ -39,7 +39,7 @@
                 <tr>
                     <td class="text-center">{$value.id}</td>
                     <td><a href="{$URL}manage/api/view/{$value.id}">{$value.api_name}</a></td>
-                    <td>{if="!empty($value.last_timestamp)"}{function="date('r', $value.last_timestamp)"}{else}never{/if}</td>
+                    <td>{if="!empty($value.last_timestamp)"}{function="date('r', $value.last_timestamp)"}{else}Never{/if}</td>
                     <td class="text-center">{$value.count}</td>
                     <td class="text-center"><a href="{$URL}manage/api/delete/{$value.id}/{$extended_token}" class="btn btn-danger btn-xs btn-delete"> Delete</a></td>
                 </tr>
