@@ -17,14 +17,30 @@
             <h1>Settings</h1>
         </div>
         
-        {if="isset($message)"}<div class="alert alert-info col-sm-6 col-sm-offset-3 text-center"><strong>All right!</strong> {$message}</div>{/if}
+        {if="isset($message)"}<div class="alert alert-info col-sm-6 col-sm-offset-3 message"><button type="button" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button> <strong>All right!</strong> {$message}</div>{/if}
 
         <form class="form-horizontal" role="form" method="post">
             {if="isset($form_error)"}
             <div class="alert alert-danger col-sm-8 col-sm-offset-2"><strong>Oups!</strong> {$form_error}</div>
             <div class="clearfix"></div>
             {/if}
-            <div class="form-group no-espace">
+
+            {*
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-8">
+                    <h3 id="api">Global settings</h3>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="conf_email_sender" class="col-sm-2 control-label">Sender email</label>
+                <div class="col-sm-8">
+                    <input type="email" class="form-control" name="conf_email_sender" id="conf_email_sender" placeholder="moods@domain.tld" {if="isset($form_data.conf_email_sender)"}value="{$form_data.conf_email_sender}"{/if} aria-describedby="conf_email_sender_help" />
+                    <span id="conf_email_sender_help" class="help-block">PHP will try to override the sender email address used by the server with this given.</span>
+                </div>
+            </div>
+            *}
+
+            <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-8">
                     <h3 id="api">API settings</h3>
                 </div>
@@ -37,12 +53,13 @@
                         </label>
                     </div>
                     <div class="checkbox">
-                        <label for="api_request">
-                            <input type="checkbox" name="api_request" id="api_request" {if="isset($form_data.api_request) && $form_data.api_request"}checked{/if} /> Display the API request page
+                        <label for="api_requests">
+                            <input type="checkbox" name="api_requests" id="api_requests" {if="isset($form_data.api_requests) && $form_data.api_requests"}checked{/if} /> Enable API requests and display API request page
                         </label>
                     </div>
                 </div>
             </div>
+
             <input type="hidden" value="{$token}" name="token" />
             <div class="form-group form-controls">
                 <div class="col-sm-offset-2 col-sm-8">

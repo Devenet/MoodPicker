@@ -27,11 +27,23 @@
                 <div class="col-sm-offset-2 col-sm-8">
                     <div class="checkbox">
                         <label for="delete">
-                            <input type="checkbox" name="delete" id="delete" autofocus /> Yes I'm absolutly sure I want to delete the API credentials called <strong>{$api.api_name}</strong> with key <code>{$api.api_key}</code>.
+                            <input type="checkbox" name="delete" id="delete" autofocus aria-describedby="delete_help" /> Yes I’m absolutly sure I want to delete the API credentials called <strong>{$api.api_name}</strong>.
+                            <span id="delete_help" class="help-block">It will delete the API with key <code>{$api.api_key}</code> and token <code>{$api.api_token}</code>.</small>
                         </label>
                     </div>
                 </div>
             </div>
+            {if="$api.api_request"}
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-8">
+                    <div class="checkbox">
+                        <label for="delete_request">
+                            <input type="checkbox" name="delete_request" id="delete_request" {if="isset($form_data.delete_request) && $form_data.delete_request"}checked{/if} /> Remove the related API request too.
+                        </label>
+                    </div>
+                </div>
+            </div>
+            {/if}
             <input type="hidden" value="{$token}" name="token" />
             <input type="hidden" value="{$api.id}" name="api_id" />
             <div class="form-group form-controls">

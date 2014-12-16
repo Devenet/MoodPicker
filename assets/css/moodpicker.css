@@ -8,6 +8,7 @@
 .espace { margin-top: 25px; margin-bottom: 25px; }
 .espace-top { margin-top: 25px; }
 .espace-top-sm { margin-top: 10px; }
+.espace-top-md { margin-top: 35px; }
 .espace-top-lg { margin-top: 50px; }
 .espace-bottom { margin-bottom: 25px; }
 .espace-bottom-lg { margin-bottom: 10px; }
@@ -20,6 +21,7 @@
 .strong { font-weight: bold; }
 
 .navbar-header .navbar-brand img { vertical-align: bottom; }
+.page-header .title-options { float: right; margin-top: -46px; }
 pre.terminal { background-color: #444; color: #FFF; border: medium none; }
 canvas { max-width: 100%; }
 .debug_infos { position: fixed; right: 0; bottom: 0; padding: 5px 10px; font-family: sans-serif; font-size: 11px; color: #fff; line-height: 12px; text-align: right; background: rgba(0, 0, 0, .7); -webkit-border-radius: 4px 0 0 0; -moz-border-radius: 4px 0 0 0; border-radius: 4px 0 0 0; }
@@ -91,5 +93,11 @@ canvas { max-width: 100%; }
 @media(min-width: 768px) {
     .index .media-body {
         line-height: 150px;
+    }
+}
+@media(max-width: 767px) {
+    .page-header .title-options {
+        float: none !important;
+        display: inline;
     }
 }
