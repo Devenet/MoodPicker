@@ -22,7 +22,7 @@ use DataBase\SQLite;
 
 class ApiHelper {
 
-    const DB = 'mood_api';
+    const DB = 'mood_manage';
     protected $db;
 
     private $id;
@@ -135,7 +135,7 @@ class ApiHelper {
 
     public function delete() {
         if ($this->exists()) {
-            // delete generated tokens first
+            // delete related tokens first
             $q = $this->db->prepare('DELETE FROM tokens WHERE api_key = :key');
             $q->execute(array( 'key' => $this->api_key ));
             $q->closeCursor();

@@ -68,7 +68,7 @@ switch($this->request(1)) {
         $this->page('api/documentation');
         $this->fakePage('api');
         $this->assign('api_path', API::API_PATH);
-        $this->assign('api_request', (new Setting('api_request'))->getValue());
+        $this->assign('api_request', (new Setting('api_requests'))->getValue());
         if (! Cookie::Exists('notice_apidoc')) {
             $this->assign('displayNotice', TRUE);
             $this->register('script_file', 'cookie.min.js');
@@ -76,7 +76,7 @@ switch($this->request(1)) {
         break;
 
     case 'request':
-        if (! (new Setting('api_request'))->getValue()) { break; }
+        if (! (new Setting('api_requests'))->getValue()) { break; }
 
         $this->fakePage('api');
         switch ($this->request(2)) {
@@ -99,10 +99,13 @@ switch($this->request(1)) {
                             throw new \Exception('You have to agree to a fair-use of the API.');
 
                         $req = new ApiRequest();
-                        $req->setEmail(htmlspecialchars($_POST['email']));
 
-                        $result = $req->create();
-                        if (!$result)
+                        if (!$req->availableEmail($_POST['email']))
+                            throw new \Exception('A user with this email address has already done a request. <br />The webmaster is probably on <abbr title="Maybe just in front of GoT&hellip;" class="tip" data-placement="bottom">vacation</abbr> and can not handle your request for now.');
+
+                        $req->setEmail($_POST['email']);
+
+                        if (!$req->save())
                             throw new Exception('Unable to create your request. Please contact the webmaster.');
 
                         header('Location: '.$this->URL('api/request/sent'));

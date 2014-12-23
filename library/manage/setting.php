@@ -23,20 +23,24 @@ use Database\SQLite;
 class Setting {
     
     const DB = 'mood_manage';
-    private $db;
+    private static $db;
 
     protected $id;
     protected $name;
     protected $value;
 
+    private static function loadDataBase() {
+        if (empty(self::$db)) { self::$db = SQLite::Instance(self::DB); }
+    }
+
     public function __construct($name = NULL) {
-        $this->db = SQLite::Instance(self::DB);
+        self::loadDataBase();
         $this->id = NULL;
 
         if (!empty($name)) {
             $this->name = $name;
 
-            $q = $this->db->prepare('SELECT id, value FROM settings WHERE name = :name');
+            $q = self::$db->prepare('SELECT id, value FROM settings WHERE name = :name');
             $q->execute(array( 'name' => $name ));
             $data = $q->fetch();
             $q->closeCursor();
@@ -68,7 +72,7 @@ class Setting {
 
     public function save() {
         if ($this->exists()) {
-            $q = $this->db->prepare('UPDATE settings SET value = :value WHERE id = :id');
+            $q = self::$db->prepare('UPDATE settings SET value = :value WHERE id = :id');
             $row_updated = $q->execute(array(
                 'value' => $this->value,
                 'id' => $this->id
@@ -77,14 +81,14 @@ class Setting {
             return $row_updated == 1;
         }
         if (!empty($this->name) && !empty($this->value)) {
-            $q = $this->db->prepare('INSERT INTO settings(name, value) VALUES(:name, :value)');
+            $q = self::$db->prepare('INSERT INTO settings(name, value) VALUES(:name, :value)');
             $q->execute(array(
                 'value' => $this->value,
                 'name' => $this->name
             ));
             $q->closeCursor();
 
-            $q = $this->db->query('SELECT last_insert_rowid() AS last_row FROM api_request');
+            $q = self::$db->query('SELECT last_insert_rowid() AS last_row FROM settings');
             $data = $q->fetch();
             $q->closeCursor();
 
@@ -97,11 +101,19 @@ class Setting {
 
     public function delete() {
         if ($this->exists) {
-            $q = $this->db->prepare('DELETE FROM settings WHERE id = :id');
+            $q = self::$db->prepare('DELETE FROM settings WHERE id = :id');
             $row_updated = $q->execute(array( 'id' => $this->id ));
             $q->closeCursor();
             return $row_updated == 1;
         }
+    }
+
+    public static function getSettings() {
+        self::loadDataBase();
+        $q = self::$db->query('SELECT id, name, value FROM settings');
+        $data = $q->fetchAll();
+        $q->closeCursor();
+        return $data;
     }
 
 }
