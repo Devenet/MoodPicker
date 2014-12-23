@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+<head>
+	{include="../inc/head"}
+</head>
+<body class="index">
+	{include="../inc/navbar"}
+    
+    <div class="container">
+        <ol class="breadcrumb espace-bottom">
+            <li><a href="{$URL}">{$app_name}</a></li>
+            <li><a href="{$URL}manage">Manage</a></li>
+            <li><a href="{$URL}manage/api">API</a></li>
+            <li><a href="{$URL}manage/api/requests">Requests</a></li>
+            <li class="active">Remove</li>
+        </ol>
+
+        <div class="page-header no-espace-top espace-bottom">
+            <h1>Remove <small>API requests</small></h1>
+        </div>
+
+        <form class="form-horizontal" role="form" method="post">
+            {if="isset($form_error)"}
+            <div class="alert alert-danger col-sm-8 col-sm-offset-2"><strong>Oups!</strong> {$form_error}</div>
+            <div class="clearfix"></div>
+            {/if}
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-8">
+                    <div class="checkbox">
+                        <label for="delete">
+                            <input type="checkbox" name="delete" id="delete" autofocus /> Yes I’m absolutly sure I want to remove the API request of <strong>{$request.email}</strong>.
+                        </label>
+                    </div>
+                </div>
+            </div>
+            {if="$request.isApiActive"}
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-8">
+                    <div class="checkbox">
+                        <label for="delete_api">
+                            <input type="checkbox" name="delete_api" id="delete_api" {if="isset($form_data.delete_api) && $form_data.delete_api"}checked{/if} /> Delete the related API credentials too.
+                        </label>
+                    </div>
+                </div>
+            </div>
+            {/if}
+            <input type="hidden" value="{$token}" name="token" />
+            <input type="hidden" value="{$request.id}" name="request_id" />
+            <div class="form-group form-controls">
+                <div class="col-sm-offset-2 col-sm-8">
+                    <button type="submit" class="btn btn-danger">Remove</button>
+                    <a href="{$URL}manage/api/requests" class="btn btn-default tip" title="Return to API requests list" data-placement="right">Back to safety</a>
+                </div>
+            </div>
+        </form>
+
+    </div>
+    
+    {include="../inc/footer"}
+	{include="../inc/script"}
+</body>
+</html>
