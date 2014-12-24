@@ -56,6 +56,7 @@ abstract class Config {
             
             if (is_file(self::FILE_CONFIG))
                 require_once self::Path(self::FILE_CONFIG);
+            else $_CONFIG = array();
 
             foreach(self::$entries as $entry) {
                 self::$values[$entry] = (array_key_exists($entry, $_CONFIG)) ? $_CONFIG[$entry] : self::DefaultValue($entry);
