@@ -258,7 +258,7 @@ final class Application {
     public function requireAuth() {
         $this->canLogin();
         if (!$this->auth->isLogged()) {
-            header('Location: '.$this->URL('manage/authentification'));
+            header('Location: '.$this->URL('authentification'));
             exit();
         }
     }
