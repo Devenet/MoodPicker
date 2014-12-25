@@ -23,8 +23,10 @@ use Core\Config;
 use Core\Token;
 use Utils\Menu;
 use Utils\Cookie;
+use Utils\Session;
 use Utils\TextHelper;
 use Database\SQLite;
+use Manage\Authentification;
 
 
 final class Application {
@@ -36,6 +38,7 @@ final class Application {
 	private $request;
 	private $modules;
 	private $url;
+    private $auth;
 
     private $timestart;
 
@@ -58,6 +61,8 @@ final class Application {
 		
 		session_name(md5($_SERVER['SCRIPT_NAME']));
         session_start();
+
+        $this->auth = new Authentification();
         
 		$this->request = preg_split('-/-', isset($_GET['page']) ? $_GET['page'] : '');
         if ($this->request[0] == 'index') { header('Location: ./'); }
@@ -223,12 +228,16 @@ final class Application {
     }
 
     public function getExtendedToken() {
-        $token = Token::Generate(TRUE);
+        $token = Session::Exists('current_ext_token') ? Session::Get('current_ext_token') : Token::Generate(TRUE);
+        Session::Add('current_ext_token', $token);
         $this->template->assign('extended_token', $token);
         return $token;
     }
     public function acceptExtendedToken($token) {
-        if (Token::AcceptExtended($token)) { return TRUE; }
+        if (Token::AcceptExtended($token)) {
+            Session::Remove('current_ext_token');
+            return TRUE;
+        }
         // invalid token...
         header('HTTP/1.1 401 Unauthorized', TRUE, 401);
         $this->errorPage('Invalid security token', 'The received token was empty or invalid. <br />Are you sure that <em>Cookies</em> are enabled on your browser?');
@@ -237,7 +246,23 @@ final class Application {
     public function RemoveExtendedToken($token) {
         Token::RemoveExtended($token); 
     }
-    
+
+    // auth management
+    public function canLogin() {
+        if ($this->auth->isBanned()) {
+            header('HTTP/1.1 403 Forbidden', TRUE, 403);
+            $this->errorPage('You don’t have permission to access on this server', 'You have been banned. <br />If you think it’s an error please come back <strong>later</strong> and try again.', FALSE);
+        }
+        return TRUE;
+    }
+    public function requireAuth() {
+        $this->canLogin();
+        if (!$this->auth->isLogged()) {
+            header('Location: '.$this->URL('manage/authentification'));
+            exit();
+        }
+    }
+
     // generic error page
     public function errorPage($title, $content, $shouldTryAgain = TRUE) {
         $this->template->assign('error_title', $title);
@@ -246,6 +271,10 @@ final class Application {
         $this->page = '_error';
         $this->run();
         exit();
+    }
+
+    public function hackAttempt() {
+        $this->errorPage('Something bad happend', 'Yeah, something very bad happend. <br />Maybe you just wanted to hack the system?');
     }
 
 }
