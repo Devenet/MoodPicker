@@ -23,7 +23,7 @@ use Core\Config;
 
 class User {
     
-    const DB = 'mood_manage';
+    const DB = 'moodpicker';
     private $db;
 
     const PASSWORD_LENGTH = 6;

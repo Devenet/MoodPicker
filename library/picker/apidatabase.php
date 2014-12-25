@@ -23,7 +23,7 @@ use Core\Config;
 
 class ApiDataBase {
 
-    const DB_API = 'mood_manage';
+    const DB_API = 'moodpicker';
     // 10 min before expiration
     const TOKEN_EXPIRATION = 600;  
 

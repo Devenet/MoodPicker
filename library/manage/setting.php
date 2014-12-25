@@ -22,7 +22,7 @@ use Database\SQLite;
 
 class Setting {
     
-    const DB = 'mood_manage';
+    const DB = 'moodpicker';
     private static $db;
 
     protected $id;

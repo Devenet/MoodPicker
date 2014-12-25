@@ -22,7 +22,7 @@ use DataBase\SQLite;
 
 class ApiHelper {
 
-    const DB = 'mood_manage';
+    const DB = 'moodpicker';
     protected $db;
 
     private $id;
