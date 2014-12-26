@@ -1,10 +1,10 @@
 <!doctype html>
 <html>
 <head>
-	{include="../inc/head"}
+	{include="../../inc/head"}
 </head>
 <body class="index">
-	{include="../inc/navbar"}
+	{include="../../inc/navbar"}
     
     <div class="container">
         <ol class="breadcrumb espace-bottom">
@@ -23,7 +23,7 @@
             <div class="alert alert-danger col-sm-8 col-sm-offset-2"><strong>Oups!</strong> {$form_error}</div>
             <div class="clearfix"></div>
             {/if}
-            {include="_form_api_add"}
+            {include="_form_add"}
             <input type="hidden" value="{$token}" name="token" />
             <div class="form-group form-controls">
                 <div class="col-sm-offset-2 col-sm-8">
@@ -34,7 +34,7 @@
 
     </div>
     
-    {include="../inc/footer"}
-	{include="../inc/script"}
+    {include="../../inc/footer"}
+	{include="../../inc/script"}
 </body>
 </html>
