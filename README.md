@@ -78,21 +78,6 @@ $_CONFIG = array(
     // force default theme
     'theme' => 'default',
     
-    // api credentials
-    // security note: change the example credentials!
-    'api' => array(
-        // some app
-        array(
-            'key' => 'a3d0855f89c2aba71141fe458e1736db',
-            'token' => 'da39a3ee5e6b4b0d3255bfef95601890afd80709'
-        ),
-        // another app
-        array(
-            'key' => 'e767ec939ad15306705d3a6b622cfdfd',
-            'token' => '449b1d0eb7c15c9bf0d3da0cf9fe2179f741a509'
-        )
-    ),
-    
     // debug mode
     'debug' => false
 );
@@ -101,16 +86,19 @@ $_CONFIG = array(
 ## API
 
 By default, you share your mood browsing the website.  
-An API is available to get moods, and also to submit some.
+An API is available to get or submit moods. Credentials are required to submit moods.
 
 ### Credentials
 
-You need to edit the `config.php` file to add credential for each app which need to acces the API.
-Do not use the example credentials for security reasons!
+You can manage the credentials from `manage/api`.  
+A credential is composed from a couple of key and token.
+
+
+If you enable _API requests_, visitors will be able to ask for API credentials. You only have to accept or reject the request to allow or forbiden a request.
 
 ### Documentation
 
-The API documentation is available on the API page on your Mood Picker.
+The API documentation is available from the Manage section. You also can display it for all users.
 
 ***
 
