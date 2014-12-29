@@ -23,18 +23,8 @@
             <div class="alert alert-danger col-sm-8 col-sm-offset-2"><strong>Oups!</strong> {$form_error}</div>
             <div class="clearfix"></div>
             {/if}
-            <div class="form-group">
-                <label for="email" class="col-sm-2 control-label">Email</label>
-                <div class="col-sm-8">
-                    <input type="email" class="form-control" name="email" id="email" placeholder="dude@domain.tld" {if="isset($form_data.email)"}value="{$form_data.email}"{/if} autofocus />
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="pass" class="col-sm-2 control-label">Password</label>
-                <div class="col-sm-8">
-                    <input type="password" class="form-control" name="pass" id="pass" placeholder="Fabulous password" />
-                </div>
-            </div>
+            {include="_form_add"}
+
             <input type="hidden" value="{$token}" name="token" />
             <div class="form-group form-controls">
                 <div class="col-sm-offset-2 col-sm-8">
