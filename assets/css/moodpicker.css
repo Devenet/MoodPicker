@@ -24,6 +24,8 @@
 .page-header .title-options { float: right; margin-top: -46px; }
 pre.terminal { background-color: #444; color: #FFF; border: medium none; }
 canvas { max-width: 100%; }
+.bg-breath { padding: 15px 20px; }
+
 .debug_infos { position: fixed; right: 0; bottom: 0; padding: 5px 10px; font-family: sans-serif; font-size: 11px; color: #fff; line-height: 12px; text-align: right; background: rgba(0, 0, 0, .7); -webkit-border-radius: 4px 0 0 0; -moz-border-radius: 4px 0 0 0; border-radius: 4px 0 0 0; }
 .stick { position: fixed; top: 10px;  max-width: 100%; }
 

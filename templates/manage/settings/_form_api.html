@@ -1,0 +1,14 @@
+<div class="form-group">
+    <div class="col-sm-offset-2 col-sm-8">
+        <div class="checkbox">
+            <label for="api_display_doc">
+                <input type="checkbox" name="api_display_doc" id="api_display_doc" {if="isset($form_data.api_display_doc) && $form_data.api_display_doc"}checked{/if}/> Display the API documentation page for everyone
+            </label>
+        </div>
+        <div class="checkbox">
+            <label for="api_requests">
+                <input type="checkbox" name="api_requests" id="api_requests" {if="isset($form_data.api_requests) && $form_data.api_requests"}checked{/if} /> Enable API requests and display API request page
+            </label>
+        </div>
+    </div>
+</div>
