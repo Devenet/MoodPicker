@@ -19,7 +19,7 @@
         </div>
 
         <p class="bg-primary bg-breath text-center espace-bottom">
-            It seems that is the first time your run the application! So let’s create and set required fields.
+            It seems that is the first time your run the application! So let’s configure the app.
         </p>
 
         <form class="form-horizontal" role="form" method="post">
@@ -32,6 +32,7 @@
                 <div class="col-sm-offset-2 col-sm-8">
                     <h3 class="no-espace-bottom">Create the admin account</h3>
                     <p class="help-block">You will be able to create other accounts after.</p>
+                    {if="!empty($_GET['force-erase'])"}<p class="bg-warning bg-breath">Be careful: the user will be erased.</p>{/if}
                 </div>
             </div>
             {include="users/_form_add"}
@@ -54,7 +55,7 @@
             <input type="hidden" value="{$token}" name="token" />
             <div class="form-group form-controls">
                 <div class="col-sm-offset-2 col-sm-8">
-                    <button type="submit" class="btn btn-primary">Save and Let’s go!</button>
+                    <button type="submit" class="btn btn-primary">OK, let’s go!</button>
                 </div>
             </div>
         </form>

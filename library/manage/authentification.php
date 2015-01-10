@@ -24,7 +24,7 @@ use Database\File;
 class Authentification {
 
 	const SESSION_LOGGED = 'authentification_logged';
-	const SESSION_USER = 'authentification_user';
+	const SESSION_USER_ID = 'authentification_user_id';
 	const SESSION_FAILURE = 'authentification_failure';
 
     const TIMEOUT_INACTIVITY = 3600;
@@ -38,13 +38,15 @@ class Authentification {
     	$this->failure = Session::Exists(self::SESSION_FAILURE) ? Session::Get(self::SESSION_FAILURE) : 0;
     }
 
-    public function login($user) {
+    public function login($user_id) {
+        Session::Add(self::SESSION_USER_ID, $user_id);
         Session::Add(self::SESSION_FAILURE, $this->failure = 0);
         Session::Add(self::SESSION_LOGGED, TRUE);
     }
 
     public function logout() {
         Session::Add(self::SESSION_LOGGED, FALSE);
+        Session::Remove(self::SESSION_USER_ID);
         Session::Remove(self::SESSION_LOGGED);
     }
 

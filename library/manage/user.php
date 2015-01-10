@@ -52,6 +52,19 @@ class User {
             $this->last_ip = $data['last_ip'];
         }
     }
+    public function loadFromEmail($email) {
+        $q = $this->db->prepare('SELECT id, last_login, last_ip FROM users WHERE email = :email');
+        $q->execute(array( 'email' => $email ));
+        $data = $q->fetch();
+        $q->closeCursor();
+        if (!empty($data['id'])) {
+            $this->id = $data['id'];
+            $this->email = $email;
+            $this->last_login = $data['last_login'];
+            $this->last_ip = $data['last_ip'];
+        }
+    }
+
 
     public function exists() {
         return !empty($this->id);

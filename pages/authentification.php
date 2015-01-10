@@ -19,13 +19,13 @@ Code source hosted on https://github.com/nicolabricot/MoodPicker
 use Manage\Authentification;
 use Manage\User;
 
-$this->canLogin();
-
-if ($this->request(2) == 'logout') {
+if ($this->request(1) == 'logout') {
     $this->auth->logout();
     header('Location: '.$this->URL('manage'));
     exit();
 }
+
+$this->canLogin();
 
 if ($this->auth->isLogged()) {
     header('Location: '.$this->URL('manage'));
@@ -53,7 +53,7 @@ if (!empty($_POST)) {
         }
 
         $u->registerLogin();
-        $this->auth->login($u);
+        $this->auth->login($u->getId());
 
         header('Location: '.$this->URL('manage'));
         exit();
