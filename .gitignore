@@ -2,3 +2,4 @@ config.php
 !library/core/config.php
 data/*.db
 data/cache/
+data/ipbans.php

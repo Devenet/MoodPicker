@@ -19,37 +19,29 @@ Code source hosted on https://github.com/nicolabricot/MoodPicker
 namespace Database;
 
 use Core\Config;
+use DataBase\File;
 
-class File {
+class SerializedFile extends File {
 
-    const FLAG_APPEND = FILE_APPEND;
-    const FLAG_LOCK = LOCK_EX;
+    const PREFIX = '<?php /* ';
+    const SUFFIX = ' */ ?>';
+    const EXTENSION = '.php';
 
-    protected $file;
-    
     public function __construct($filename) {
-        $this->file = Config::DIR_DATA.DIRECTORY_SEPARATOR.$filename;
-    }
-
-    public function exists() {
-        return is_file($this->file);
-    }
-    public function getFile() {
-        return $this->file;
+        parent::__construct($filename.SerializedFile::EXTENSION);
     }
 
     public function save($data, $flags = 0) {
-        return file_put_contents($this->file, $data, $flags);
-    }
-    public function get() {
-        return $this->exists() ? file_get_contents($this->file) : NULL;
+        $data = SerializedFile::PREFIX.base64_encode(gzdeflate(serialize($data))).SerializedFile::SUFFIX;
+        return parent::save($data, $flags);
     }
 
-    public function delete() {
-        return unlink($this->file);
+    public function get() {
+        $data = parent::get();
+        if (empty($data)) { return $data; }
+        return unserialize(gzinflate(base64_decode(substr($data, strlen(SerializedFile::PREFIX), -strlen(SerializedFile::SUFFIX)))));
     }
 
 }
-
 
 ?>
