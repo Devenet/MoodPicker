@@ -71,6 +71,7 @@ switch($this->request(1)) {
         $this->assign('api_request', (new Setting('api_requests'))->getValue());
         if (! Cookie::Exists('notice_apidoc')) {
             $this->assign('displayNotice', TRUE);
+            $this->assign('cookie_display_name', Cookie::Name('notice_apidoc'));
             $this->register('script_file', 'cookie.min.js');
         }
         break;

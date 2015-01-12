@@ -27,24 +27,28 @@ class Cookie {
     const HOUR = 3600;
     const DAY = 86400;
     const MONTH = 2678400;
+
+    static public function Name($name) {
+        return sha1($_SERVER['SCRIPT_FILENAME'].Config::Get('app').'_'.$name);
+    }
     
     static public function Add($name, $value = 1, $expire = Cookie::SESSION) {
         // name, value, expire, path, domain, secure, httponly
-        setcookie(Config::Get('app').'_'.$name, $value, $expire == Cookie::SESSION ? 0 : time()+$expire,
+        setcookie(self::Name($name), $value, $expire == Cookie::SESSION ? 0 : time()+$expire,
             '/', $_SERVER['HTTP_HOST'], FALSE, TRUE);
     }
     
     static public function Exists($name) {
-        return isset($_COOKIE[Config::Get('app').'_'.$name]);
+        return isset($_COOKIE[self::Name($name)]);
     }
     
     static public function Get($name) {
         if (! self::Exists($name)) { return NULL; }
-        return htmlspecialchars($_COOKIE[Config::Get('app').'_'.$name]);
+        return htmlspecialchars($_COOKIE[self::Name($name)]);
     }
     
     static public function Remove($name) {
-        setcookie (Config::Get('app').'_'.$name, '', time()-3600, '/', $_SERVER['HTTP_HOST']);
+        setcookie (self::Name($name), '', time()-3600, '/', $_SERVER['HTTP_HOST']);
     }
 
 }

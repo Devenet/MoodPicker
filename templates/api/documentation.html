@@ -18,7 +18,7 @@
     {if="$api_request && isset($displayNotice)"}
     <div class="bg-warning" style="margin-top: -21px; margin-bottom: 21px;">
 	    <div class="container text-center">
-	        <p style="margin: 15px auto;">To register an account and get your API credentials, please <a href="{$URL}api/request">make a request</a>. <button type="button" class="btn btn-default btn-xs" onclick="$.cookie('mood_picker_notice_apidoc', 1, { expires: 1, path: '/' }); $(this).parent().slideUp(); return false;">Close</button></p>
+	        <p style="margin: 15px auto;">To register an account and get your API credentials, please <a href="{$URL}api/request">make a request</a>. <button type="button" class="btn btn-default btn-xs" onclick="$.cookie('{$cookie_display_name}', 1, { expires: 1, path: '/' }); $(this).parent().slideUp(); return false;">Close</button></p>
 	    </div>
 	</div>
     {/if}
