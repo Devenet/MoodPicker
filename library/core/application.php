@@ -39,6 +39,7 @@ final class Application {
 	private $modules;
 	private $url;
     private $auth;
+    private $installed = TRUE;
 
     private $timestart;
 
@@ -58,17 +59,18 @@ final class Application {
             'debug' => Config::Get('debug')
         ));
 		$this->modules = array();
-		
+
 		session_name(md5($_SERVER['SCRIPT_NAME']));
         session_start();
 
         $this->auth = new Authentification();
-        
+
 		$this->request = preg_split('-/-', isset($_GET['page']) ? $_GET['page'] : '');
         if ($this->request[0] == 'index') { header('Location: ./'); }
+        if (!$this->installed)  { $this->request = ['manage', 'installation']; }
         $this->page = empty($this->request[0]) ? 'index' : str_replace("\0", '', htmlspecialchars($this->request[0]));
         $this->fake_page = NULL;
-        
+
         $this->url = mb_substr($_SERVER['SCRIPT_NAME'], 0, mb_strlen($_SERVER['SCRIPT_NAME'])-9);
         $this->template->assign('URL', $this->url);
 
@@ -79,22 +81,24 @@ final class Application {
     private function checkRequirements() {
         // is SQLite3 available
         if (! class_exists('SQLite3', false)) { die('<p>Holy crap! The PHP extension <strong>SQLite3</strong> is not actived or installed.</p>'); }
-        // can we write 
+        // can we write
         if (! is_writable(Config::DIR_DATA)) { die('<p>Holy crap! Application does not have the right to write in its own directory <code>'.Config::DIR_DATA.'</code>.</p>'); }
+        // is the apps installed
+        if (! is_file(Config::Path(Config::DIR_DATA.'/installed'))) { $this->installed = FALSE; }
     }
-	
+
 	// get URL base
 	public function URL($file = '') {
 	    return $this->url.$file;
 	}
-	
-	// return requested url 
+
+	// return requested url
 	public function request($key = NULL) {
 	    if (is_null($key)) { return array_map('htmlspecialchars', $this->request); }
 	    if (array_key_exists($key, $this->request)) { return htmlspecialchars($this->request[$key]); }
 	    return NULL;
 	}
-	
+
 	// register a module
 	public function register($module, $data) {
 	    switch($module) {
@@ -110,7 +114,7 @@ final class Application {
 	public function assign($name, $value) {
 	    $this->template->assign($name, $value);
 	}
-	
+
 	// assign a sweety name for the current page used for active items or menus
 	public function fakePage($page) {
 	    $this->fake_page = $page;
@@ -148,13 +152,13 @@ final class Application {
         $controller = Config::Path(DIRECTORY_SEPARATOR.Config::DIR_PAGES.DIRECTORY_SEPARATOR.$this->page.'.php');
         if (file_exists($controller)) { require_once $controller; }
     }
-    
+
     // build theme
     protected function buildPage() {
         // theme
         $this->template->assign('theme', $this->theme->getTheme());
         $this->template->assign('themes', $this->theme->getThemes());
-        
+
         // force to be a specific page
         $page = is_null($this->fake_page) ? $this->page : $this->fake_page;
 
@@ -167,7 +171,7 @@ final class Application {
         $this->template->assign('app_api_version', TextHelper::niceVersion(\Picker\API::VERSION));
         $this->template->assign('app_full_version', self::VERSION);
         $this->template->assign('app_full_api_version', \Picker\API::VERSION);
-        
+
         // navbar
         if (! isset($this->modules[Menu::NAVBAR])) {
             $m = new Menu();
@@ -175,7 +179,7 @@ final class Application {
             $this->modules[Menu::NAVBAR] = $m;
         }
         $this->template->assign(Menu::NAVBAR, $this->modules[Menu::NAVBAR]->generate($this->url.$page));
-        
+
         // navbar right
         if (isset($this->modules[Menu::NAVBAR_RIGHT])) {
             $this->template->assign(Menu::NAVBAR_RIGHT, $this->modules[Menu::NAVBAR_RIGHT]->generate($this->url.$page));
@@ -196,7 +200,7 @@ final class Application {
         }
         $this->template->assign('debug', Config::Get('debug'));
     }
-    
+
     // draw the template or 404
 	protected function display() {
 		try {
@@ -212,7 +216,7 @@ final class Application {
 			$this->template->draw('_404');
 		}
 	}
-    
+
     // token management
     public function getToken() {
         $token = Token::Generate();
@@ -244,7 +248,7 @@ final class Application {
         return FALSE;
     }
     public function RemoveExtendedToken($token) {
-        Token::RemoveExtended($token); 
+        Token::RemoveExtended($token);
     }
 
     // auth management
