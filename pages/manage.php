@@ -255,7 +255,7 @@ switch($this->request(1)) {
             case 'requests':
                 switch($this->request(3)) {
                     case 'accept':
-                        if (empty($this->request(4)) || empty($this->request(5))) { break; }
+                        if (!$this->request(4) || !$this->request(5)) { break; }
                         $this->acceptExtendedToken($this->request(5));
 
                         $req = new ApiRequest();
@@ -325,7 +325,7 @@ switch($this->request(1)) {
                         break;
 
                     case 'reject':
-                        if (empty($this->request(4)) || empty($this->request(5))) { break; }
+                        if (!$this->request(4) || !$this->request(5)) { break; }
                         $this->acceptExtendedToken($this->request(5));
 
                         $req = new ApiRequest();
@@ -365,7 +365,7 @@ switch($this->request(1)) {
                         break;
 
                     case 'remove':
-                        if (empty($this->request(4)) || empty($this->request(5))) { break; }
+                        if (!$this->request(4) || !$this->request(5)) { break; }
                         $this->acceptExtendedToken($this->request(5));
 
                         $req = new ApiRequest();
@@ -481,7 +481,7 @@ switch($this->request(1)) {
                 break;
 
             case 'delete':
-                if (empty($this->request(3)) || empty($this->request(4))) { break; }
+                if (!$this->request(3) || !$this->request(4)) { break; }
                 $this->acceptExtendedToken($this->request(4));
 
                 // can not delete current user
