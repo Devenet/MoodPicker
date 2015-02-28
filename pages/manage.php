@@ -149,7 +149,7 @@ switch($this->request(1)) {
                 break;
 
             case 'view':
-                if (empty($this->request(3))) { break; }
+                if (!$this->request(3)) { break; }
 
                 $api = new ApiHelper();
                 $api->loadFromId(intval($this->request(3)));
