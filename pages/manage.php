@@ -198,7 +198,7 @@ switch($this->request(1)) {
                 break;
 
             case 'delete':
-                if (empty($this->request(3)) || empty($this->request(4))) { break; }
+                if (!$this->request(3) || !$this->request(4)) { break; }
                 $this->acceptExtendedToken($this->request(4));
 
                 $api = new ApiHelper();
