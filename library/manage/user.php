@@ -22,7 +22,7 @@ use Database\SQLite;
 use Core\Config;
 
 class User {
-    
+
     const DB = 'moodpicker';
     private $db;
 
@@ -95,7 +95,7 @@ class User {
     }
     public function setPassword($password) {
         if (empty($password) || mb_strlen($password) < self::PASSWORD_LENGTH) { return; }
-        $this->password = password_hash($password, PASSWORD_DEFAULT);
+        $this->password = $this->passwordHash($password);
     }
 
     public function hasStillUser() {
@@ -103,6 +103,17 @@ class User {
         $data = $q->fetch();
         $q->closeCursor();
         return $data['total'] > 1;
+    }
+
+    private function passwordHash($password) {
+      if (function_exists('password_hash'))
+        return password_hash($password, PASSWORD_DEFAULT);
+      return hash('sha512', md5(__FILE__).$password);
+    }
+    private function passwordVerify($password, $hash) {
+      if (function_exists('password_verify'))
+        return password_verify($password, $hash);
+      return $hash === hash('sha512', md5(__FILE__).$password);
     }
 
     public function acceptCredential($email, $password) {
@@ -113,8 +124,8 @@ class User {
         $q->closeCursor();
 
         if (empty($data['id'])) { return false; }
-        if (! password_verify($password, $data['password'])) { return false; }
-        
+        if (! $this->passwordVerify($password, $data['password'])) { return false; }
+
         $this->id = $data['id'];
         return true;
     }
