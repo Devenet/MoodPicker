@@ -5,7 +5,7 @@
 </head>
 <body class="index">
     {include="../inc/navbar"}
-    
+
     <div class="container">
         <ol class="breadcrumb espace-bottom">
             <li><a href="{$URL}">{$app_name}</a></li>
@@ -16,11 +16,14 @@
         <div class="page-header no-espace-top espace-bottom">
             <h1>API</h1>
             <div class="title-options">
-                <a href="{$URL}manage/api/requests" class="btn btn-link">Manage requests</a><a href="{$URL}manage/api/settings" class="btn btn-link">Settings</a>
+                <a href="{$URL}manage/api/requests" class="btn btn-link">
+                  Manage requests {if="$pending_requests > 0"}<span class="badge">{$pending_requests}</span>{/if}
+                </a>
+                <a href="{$URL}manage/api/settings" class="btn btn-link">Settings</a>
                 <a href="{$URL}manage/api/add" class="btn btn-default"><span class="glyphicon glyphicon-plus-sign"></span> Add</a>
             </div>
         </div>
-        
+
         {if="isset($message)"}<div class="alert alert-info col-sm-6 col-sm-offset-3 message"><button type="button" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button> <strong>All right!</strong> {$message}</div>{/if}
 
         <table class="table table-striped table-hover table-responsive">
@@ -40,14 +43,17 @@
                     <td><a href="{$URL}manage/api/view/{$value.id}">{$value.api_name}</a></td>
                     <td>{if="!empty($value.last_timestamp)"}{function="date('r', $value.last_timestamp)"}{else}Never{/if}</td>
                     <td class="text-center">{$value.count}</td>
-                    <td class="text-center"><a href="{$URL}manage/api/delete/{$value.id}/{$extended_token}" class="btn btn-danger btn-xs btn-delete"> Delete</a></td>
+                    <td class="text-center">
+                      <a href="{$URL}manage/api/view/{$value.id}" class="btn btn-primary btn-xs"> View</a>
+                      <a href="{$URL}manage/api/delete/{$value.id}/{$extended_token}" class="btn btn-danger btn-xs btn-delete"> Delete</a>
+                    </td>
                 </tr>
                 {/loop}
             </tbody>
         </table>
-        
+
     </div>
-    
+
     {include="../inc/footer"}
     {include="../inc/script"}
 </body>

@@ -171,6 +171,14 @@ class ApiRequest {
         return $data;
     }
 
+    public static function countPendingRequests() {
+      $query = SQLite::Instance(self::DB)->prepare('SELECT count(id) AS count FROM api_request WHERE approbation = :pending');
+      $query->execute(array('pending' => self::PENDING));
+      $data = $query->fetch();
+      $query->closeCursor();
+      return $data['count'];
+    }
+
 }
 
 ?>

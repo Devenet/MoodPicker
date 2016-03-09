@@ -430,6 +430,7 @@ switch($this->request(1)) {
                 $this->page('manage/api');
                 $this->getExtendedToken();
                 $this->assign('apis', ApiHelper::getApis());
+                $this->assign('pending_requests', ApiRequest::countPendingRequests());
                 if (isset($_GET['created'])) { $this->assign('message', 'The API credentials have been created.'); }
                 else if (isset($_GET['deleted'])) { $this->assign('message', 'The API credentials have been deleted.'); }
                 else if (isset($_GET['partially-deleted'])) { $this->assign('message', 'The API credentials have been deleted even if the related API request could not be deleted.'); }
