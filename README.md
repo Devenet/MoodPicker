@@ -53,18 +53,20 @@ First create a `config.php` file ont the root folder of the apps, and then edit 
 
 
 ```php
+<?php
+
 $_CONFIG = array(
 
     // name of the application
     'name' => 'Mood Picker',
     // title used in address bar
     'title' => 'Share your mood!',
-    
+
     // meta description tag (for search engines)
     'description' => 'Share your mood!',
     // copyright notice in footer
     'copyright' => 'All rights reserved',
-    
+
     // available themes (match the css file)
     'themes' => array(
         'default',
@@ -77,7 +79,7 @@ $_CONFIG = array(
     ),
     // force default theme
     'theme' => 'default',
-    
+
     // debug mode
     'debug' => false
 );
