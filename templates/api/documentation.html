@@ -14,7 +14,7 @@
 </head>
 <body class="index">
 	{include="../inc/navbar"}
-    
+
     {if="$api_request && isset($displayNotice)"}
     <div class="bg-warning" style="margin-top: -21px; margin-bottom: 21px;">
 	    <div class="container text-center">
@@ -22,7 +22,7 @@
 	    </div>
 	</div>
     {/if}
-    
+
 	<div class="container">
         <ol class="breadcrumb espace-bottom">
             <li><a href="{$URL}">{$app_name}</a></li>
@@ -33,7 +33,7 @@
 	    <div class="page-header no-espace-top espace-bottom">
 	        <h1>Documentation <small>API {$app_api_version}</small></h1>
 	    </div>
-	
+
 	    <div class="row">
 	        <div class="col-md-3 hidden-xs hidden-sm">
                 <div class="list-group navigate" id="summary">
@@ -47,7 +47,7 @@
                     {*<a href="#cheatsheet" class="list-group-item"><span class="glyphicon glyphicon-file"></span> Cheatsheet</a>*}
                 </div>
 	        </div>
-	    
+
 	        <div class="col-md-9">
                 <h2 class="no-espace-top" id="overview">Overview</h2>
                 <p>You will know (almost) everything about the API and how to use it, so be happy!
@@ -58,7 +58,7 @@
                 <p>The API is available under <kbd>{$_SERVER['SERVER_NAME']}{$URL}{$api_path}</kbd>.</p>
 
                 {if="$api_request"}<p class="espace-top">To register an account and get your API credentials, please <a href="{$URL}api/request">make a request</a>.</p>{/if}
-                
+
                 <h2 id="errors">Errors</h2>
 	            <p>If the API is unable to respond to your request, an error (based on HTTP protocol) will be returned.</p>
 	            <pre  class="terminal">{
@@ -82,7 +82,7 @@
 				<h2 id="version">Version</h2>
 				<pre>GET <a href="{$URL}{$api_path}/version" rel="external">/version</a></pre>
 				<p>You can get the current version for the API and the MoodPicker application.</p>
-				<pre class="terminal">{"api_version":"1.1.0", "moodpicker_version":"1.1.0"}</pre>
+				<pre class="terminal">{"api_version":"1.1.0", "moodpicker_version":"1.2.0"}</pre>
 
 
 	            <h2 id="authentification">Authentification</h2>
@@ -97,7 +97,7 @@
                 <br />It will return a 401 error or the following JSON.</p>
                 <pre class="terminal">{"authentification": true}</pre>
 
-	            	            
+
 	            <h2 id="moods-translation">Moods translation</h2>
 	            <pre>GET <a href="{$URL}{$api_path}/translation" rel="external">/translation</a></pre>
 	            <h4>Returned values</h4>
@@ -107,9 +107,9 @@
         "BAD": -1
     }
 }</pre>
-	            
+
 	            <h2 id="mood-review">Get mood’s review</h2>
-	            
+
 	            <h3>Returned values</h3>
                 <pre class="terminal">{
     "date": "2014-09-15",
@@ -163,7 +163,7 @@
 	            <p>The parameter <code>:mood</code> is the current mood, and is one of the numeric values got from <a href="#moods-translation" class="navigate"><kbd>/translation</kbd></a>.
                 <br />If everything is OK, the API returns the mood you have submitted.</p>
                 <pre class="terminal">{"mood": 1, "timestamp": 1406748783}</pre>
-	            
+
                 {*
                 <h2 id="cheatsheet">Cheatsheet</h2>
 <pre>
@@ -172,11 +172,11 @@ GET <a href="{$URL}api/day/{function="date('Y-m-d')"}" rel="external">/day/{func
 GET <a href="{$URL}api/month/{function="date('Y-m')"}" rel="external">/month/{function="date('Y-m')"}</a>
 GET <a href="{$URL}api/year/{function="date('Y')"}" rel="external">/year/{function="date('Y')"}</a>
 </pre>          *}
-                
+
 	        </div>
 	    </div>
 	</div>
-    
+
     {include="../inc/footer"}
     {include="../inc/colorpicker"}
 	{include="../inc/script"}
