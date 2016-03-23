@@ -9,4 +9,11 @@
     </ul>
 
     <div class="clearfix"></div>
+    <div id="manage-link">
+      {if="!$user_isLogged"}
+        <a href="{$URL}manage"><span class="glyphicon glyphicon-lock"></span></a>
+      {else}
+        <a href="{$URL}manage">{$user_email} <span class="glyphicon glyphicon-user"></span></a>
+      {/if}
+    </div>
 </div>

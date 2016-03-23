@@ -5,7 +5,7 @@
 </head>
 <body class="index">
 	{include="../inc/navbar"}
-    
+
     <div class="container">
         <ol class="breadcrumb espace-bottom">
             <li><a href="{$URL}">{$app_name}</a></li>
@@ -34,16 +34,19 @@
                 {loop="$users"}
                 <tr>
                     <td class="text-center">{$value.id}</td>
-                    <td>{$value.email} <a href="mailto:{$value.email}" rel="external" class="pull-left espace-right-sm"><span class="glyphicon glyphicon-envelope"></span></a></td>
+                    <td><a href="{$URL}manage/users/view/{$value.id}">{$value.email}</a> <a href="mailto:{$value.email}" rel="external" class="btn btn-default btn-xs pull-left espace-right-sm"><span class="glyphicon glyphicon-envelope"></span></a></td>
                     <td>{if="!empty($value.last_login)"}{function="date('r', $value.last_login)"}{else}never{/if}</td>
-                    <td class="text-center"><a href="{$URL}manage/users/delete/{$value.id}/{$extended_token}" class="btn btn-danger btn-xs btn-delete"> Delete</a></td>
+										<td class="text-center">
+                      <a href="{$URL}manage/users/view/{$value.id}" class="btn btn-primary btn-xs"> View</a>
+                      <a href="{$URL}manage/users/delete/{$value.id}/{$extended_token}" class="btn btn-danger btn-xs btn-delete"> Delete</a>
+                    </td>
                 </tr>
                 {/loop}
             </tbody>
         </table>
 
     </div>
-    
+
     {include="../inc/footer"}
 	{include="../inc/script"}
 </body>

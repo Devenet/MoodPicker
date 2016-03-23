@@ -20,12 +20,14 @@ namespace Manage;
 
 use Utils\Session;
 use Database\File;
+use Manage\User;
 
 
 class Authentification {
 
 	const SESSION_LOGGED = 'authentification_logged';
 	const SESSION_USER_ID = 'authentification_user_id';
+	const SESSION_USER_EMAIL = 'authentification_user_infos';
     const FAILURE_FILE = 'ipbans.php';
 
     const TIMEOUT_INACTIVITY = 3600;
@@ -61,13 +63,17 @@ class Authentification {
 
     public function login($user_id) {
         $this->unbanip();
+				$user = new User();
+				$user->loadFromId($user_id);
         Session::Add(self::SESSION_USER_ID, $user_id);
+				Session::Add(self::SESSION_USER_EMAIL, $user->getEmail());
         Session::Add(self::SESSION_LOGGED, TRUE);
     }
 
     public function logout() {
         Session::Add(self::SESSION_LOGGED, FALSE);
         Session::Remove(self::SESSION_USER_ID);
+				Session::Remove(self::SESSION_USER_EMAIL);
         Session::Remove(self::SESSION_LOGGED);
     }
 
@@ -97,7 +103,7 @@ class Authentification {
 
         $this->saveBans();
     }
-    
+
 
 }
 

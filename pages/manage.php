@@ -481,48 +481,86 @@ switch($this->request(1)) {
 
                 break;
 
-            case 'delete':
-                if (!$this->request(3) || !$this->request(4)) { break; }
-                $this->acceptExtendedToken($this->request(4));
+            case 'view':
+              if (!$this->request(3)) { break; }
 
-                // can not delete current user
-                if (Session::Get(Authentification::SESSION_USER_ID) == intval($this->request(3))) {
-                    $this->errorPage('Unable to delete your own account', 'You can not delete yourself. Please ask another administrator to do it!', FALSE);
-                }
+              $u = new User();
+              $u->loadFromId(intval($this->request(3)));
 
-                $u = new User();
-                $u->loadFromId(intval($this->request(3)));
+              if (!$u->exists()) { break; }
 
-                if (!$u->exists()) { break; }
+              if (!empty($_POST)) {
+                  $this->acceptToken();
 
-                if (!empty($_POST)) {
-                    $this->acceptToken();
-                    try {
+                  try {
+                    if (empty($_POST['u_password']))
+                        throw new \Exception('Please enter a valid password.');
+                    if (mb_strlen($_POST['u_password']) < User::PASSWORD_LENGTH)
+                        throw new \Exception('The password must have at least '.User::PASSWORD_LENGTH.' caracters.');
 
-                        if (empty($_POST['delete']))
-                            throw new \Exception('Nobody will be deleted until you check the box&hellip;');
-                        if (empty($_POST['user_id']) || $_POST['user_id'] != intval($this->request(3)))
-                            $this->hackAttempt();
+                    $u->setPassword($_POST['u_password']);
 
-                        if (! $u->hasStillUser())
-                            throw new \Exception('You can not delete the only remaining user.');
+                    if (! $u->save())
+                        throw new \Exception('Unable to update the user. Please contact the webmaster.');
 
-                        if (! $u->delete())
-                            throw new \Exception('Unable to delete the user. Please contact the webmaster.');
+                    header('Location: '.$this->URL('manage/users/view/'.$u->getId().'?updated'));
+                    exit();
+                  }
+                  catch (\Exception $e) {
+                      $this->assign('form_error', $e->getMessage());
+                  }
+              }
 
-                        $this->removeExtendedToken($this->request(4));
-                        header('Location: '.$this->URL('manage/users?deleted'));
-                        exit();
-                    }
-                    catch (\Exception $e) {
-                        $this->assign('form_error', $e->getMessage());
-                    }
-                }
-                $this->page('manage/users/delete');
-                $this->getToken();
-                $this->assign('user', array( 'id' => $u->getId(), 'email' => $u->getEmail() ));
+              $this->assign('u', $u);
+              $this->page('manage/users/view');
+              $this->getToken();
+              $this->getExtendedToken();
+              if (isset($_GET['updated'])) { $this->assign('message', 'The user password have been updated.'); }
 
-                break;
+              break;
+
+              case 'delete':
+                  if (!$this->request(3) || !$this->request(4)) { break; }
+                  $this->acceptExtendedToken($this->request(4));
+
+                  // can not delete current user
+                  if (Session::Get(Authentification::SESSION_USER_ID) == intval($this->request(3))) {
+                      $this->errorPage('Unable to delete your own account', 'You can not delete yourself. Please ask another administrator to do it!', FALSE);
+                  }
+
+                  $u = new User();
+                  $u->loadFromId(intval($this->request(3)));
+
+                  if (!$u->exists()) { break; }
+
+                  if (!empty($_POST)) {
+                      $this->acceptToken();
+                      try {
+
+                          if (empty($_POST['delete']))
+                              throw new \Exception('Nobody will be deleted until you check the box&hellip;');
+                          if (empty($_POST['user_id']) || $_POST['user_id'] != intval($this->request(3)))
+                              $this->hackAttempt();
+
+                          if (! $u->hasStillUser())
+                              throw new \Exception('You can not delete the only remaining user.');
+
+                          if (! $u->delete())
+                              throw new \Exception('Unable to delete the user. Please contact the webmaster.');
+
+                          $this->removeExtendedToken($this->request(4));
+                          header('Location: '.$this->URL('manage/users?deleted'));
+                          exit();
+                      }
+                      catch (\Exception $e) {
+                          $this->assign('form_error', $e->getMessage());
+                      }
+                  }
+                  $this->page('manage/users/delete');
+                  $this->getToken();
+                  $this->assign('user', array( 'id' => $u->getId(), 'email' => $u->getEmail() ));
+
+                  break;
 
             case NULL:
                 $this->page('manage/users');

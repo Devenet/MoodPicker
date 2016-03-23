@@ -5,7 +5,7 @@
 </head>
 <body class="index">
     {include="../inc/navbar"}
-    
+
     <div class="container">
         <ol class="breadcrumb espace-bottom">
             <li><a href="{$URL}">{$app_name}</a></li>
@@ -15,7 +15,7 @@
         <div class="page-header no-espace-top espace-bottom">
             <h1>Manage</h1>
             <div class="title-options">
-                <a href="/moods/authentification/logout" class="btn btn-link">Logout</a>
+                <a href="{$URL}authentification/logout" class="btn btn-default">Logout</a>
             </div>
         </div>
 
@@ -30,9 +30,9 @@
                 <a href="{$URL}manage/settings" class="btn btn-link btn-lg">Settings</a>
             </div>
         </div>
-                
+
     </div>
-    
+
     {include="../inc/footer"}
     {include="../inc/script"}
 </body>

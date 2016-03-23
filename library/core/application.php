@@ -172,6 +172,10 @@ final class Application {
         $this->template->assign('app_full_version', self::VERSION);
         $this->template->assign('app_full_api_version', \Picker\API::VERSION);
 
+        // user infos
+        $this->template->assign('user_isLogged', $this->auth->isLogged());
+        $this->template->assign('user_email', Session::Get(Authentification::SESSION_USER_EMAIL));
+
         // navbar
         if (! isset($this->modules[Menu::NAVBAR])) {
             $m = new Menu();
