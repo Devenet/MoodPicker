@@ -30,7 +30,7 @@
             <h1>{$month_txt} {$year} <small>Review</small></h1>
 	    </div>
 	</div>
-	
+
     <div class="container espace-bottom">
         <div class="progress month-moods">
             <div class="progress-bar progress-bar-success tip" data-title="Good Mood: {$month_goods}" data-placement="top" style="width: {$month_goods_percentage}%"></div>
@@ -41,19 +41,19 @@
             <div class="col-md-4 col-sm-4 col-xs-4 text-center"><span class="espace-right-sm"><span class="glyphicon glyphicon-thumbs-up text-success"></span></span> {$month_goods_percentage|round:1}%</div>
             <div class="col-md-4 col-sm-4 col-xs-4 text-center"><span class="espace-right-sm"><span class="glyphicon glyphicon-thumbs-down text-danger"></span></span> {$month_bads_percentage|round:1}%</div>
         </div>
-        
+
         {if="1==1"}
         <div class="row espace-bottom">
             <div class="col-md-8 col-md-offset-2">
                 <h3>Days review <small>{$month_txt}</small></h3>
-                <canvas id="chartMonth" width="800" height="600"  class="center-block"></canvas>
+                <canvas id="chartMonth" width="800" height="400"  class="center-block"></canvas>
             </div>
         </div>
         {/if}
-        
+
     </div>
 
-    
+
     <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="loadingModal" aria-hidden="true">
         <div class="modal-dialog modal-sm">
             <div class="modal-content text-center" id="loadingModal">
@@ -61,7 +61,7 @@
             </div>
         </div>
     </div>
-    
+
     {include="../inc/footer"}
     {include="../inc/colorpicker"}
 	{include="../inc/script"}

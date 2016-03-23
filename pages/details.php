@@ -81,16 +81,16 @@ if (! is_null($month)) {
     $monthDays_moods = array();
     for ($i=0; $i<7; $i++) {
         $monthDays_moods[MoodLevel::GOOD][$i] = 0;
-        $monthDays_moods[MoodLevel::BAD][$i] = 0; 
-        $monthDays_moods['total'][$i] = 0; 
+        $monthDays_moods[MoodLevel::BAD][$i] = 0;
+        $monthDays_moods['total'][$i] = 0;
     }
     foreach ($month_moods as $m) {
-        $monthDays_moods[$m->getMood()][date('N', $m->getTime())-1]++; 
+        $monthDays_moods[$m->getMood()][date('N', $m->getTime())-1]++;
         $monthDays_moods['total'][date('N', $m->getTime())-1]++;
     }
 
     $s .= "
-        new Chart(document.getElementById('chartMonth').getContext('2d')).Radar(
+        new Chart(document.getElementById('chartMonth').getContext('2d')).Bar(
             {
                 labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
                 datasets: [
@@ -98,24 +98,20 @@ if (! is_null($month)) {
                         data: [".implode(", ", $monthDays_moods[MoodLevel::GOOD])."],
                         fillColor: 'rgba(150,220,220,0.1)',
                         strokeColor: $('#color_picker .progress-bar-success').css('background-color'),
-                        pointColor: $('#color_picker .progress-bar-success').css('background-color'),
-                        pointHighlightFill: '#fff',
+                        highlightFill: 'rgba(150,220,220,0.5)',
                         label: 'Good Moods'
                     },
                     {
                         data: [".implode(", ", $monthDays_moods[MoodLevel::BAD])."],
                         fillColor: 'rgba(220,150,220,0.1)',
                         strokeColor: $('#color_picker .progress-bar-danger').css('background-color'),
-                        pointColor: $('#color_picker .progress-bar-danger').css('background-color'),
-                        pointHighlightFill: '#fff',
+                        highlightFill: 'rgba(220,150,220,0.5)',
                         label: 'Bad Moods'
                     }
                 ]
             },
-            { 
-                responsive: true,
-                pointDotRadius: 4,
-                angleLineWidth : 3
+            {
+                responsive: true
             }
         );
     ";
@@ -168,7 +164,7 @@ else {
                         label: 'Good Mood'
                     }
                 ]
-                , { 
+                , {
                     animation: true,
                     animationEasing: 'linear', animationSteps: 25,
                     segmentShowStroke: false,
@@ -218,7 +214,7 @@ else {
 
 }
 
-   
+
 // shared data postlude
 $s .= '});';
 $this->register('script', TextHelper::RemoveLineBreak($s));
