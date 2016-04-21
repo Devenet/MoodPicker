@@ -7,13 +7,4 @@
     <ul class="nav nav-pills pull-right">
         <li class="tip" data-title="Back to top" data-placement="left"><a href="#" id="back_top"><span class="glyphicon glyphicon-arrow-up"></span><span class="sr-only">Back to top</span></a></li>
     </ul>
-
-    <div class="clearfix"></div>
-    <div id="manage-link">
-      {if="!$user_isLogged"}
-        <a href="{$URL}manage"><span class="glyphicon glyphicon-lock"></span></a>
-      {else}
-        <a href="{$URL}manage">{$user_email} <span class="glyphicon glyphicon-user"></span></a>
-      {/if}
-    </div>
 </div>
