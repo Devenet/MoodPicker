@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-Code source hosted on https://github.com/nicolabricot/MoodPicker
+Code source hosted on https://github.com/Devenet/MoodPicker
 */
 
 header('Content-type: image/jpeg');

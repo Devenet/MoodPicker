@@ -19,41 +19,36 @@ Code source hosted on https://github.com/nicolabricot/MoodPicker
 namespace Core;
 
 abstract class Config {
-    
+
     static private $entries = array(
-        'app', 'name', 'title',
-        'description', 'copyright',
         'theme', 'themes',
-        'database', 'api',
-        'debug'
+        'database',
+        'debug', 'app'
     );
     static private $defaultEntries = array(
-        'app' => 'mood_picker',
-        'name' => 'Mood Picker',
-        'title' => 'Share your mood!',
-        'copyright' => 'All rights reserved',
         'database' => array(
             'type' => 'sqlite',
             'name' => 'moodpicker_data'
         ),
         'themes' => array('default'),
+        'theme' => 'default',
         'debug' => false
     );
     static private $values = NULL;
-    
+
     const DIR_PAGES = 'pages';
     const DIR_TEMPLATES = 'templates';
     const DIR_DATA = 'data';
-    
+
     const FILE_CONFIG = 'config.php';
 
     static private function DefaultValue($entry) {
         return array_key_exists($entry, self::$defaultEntries) ? self::$defaultEntries[$entry] : NULL;
     }
-    
+
     static public function Get($name) {
         if (is_null(self::$values)) {
-            
+
             if (is_file(self::FILE_CONFIG))
                 require_once self::Path(self::FILE_CONFIG);
             else $_CONFIG = array();
@@ -64,7 +59,7 @@ abstract class Config {
         }
         return self::$values[$name];
     }
-    
+
     static public function Path($filename = '') {
         return dirname(__FILE__).'/../../'.$filename;
     }

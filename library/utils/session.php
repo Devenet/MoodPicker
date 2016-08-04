@@ -13,31 +13,32 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-Code source hosted on https://github.com/nicolabricot/MoodPicker
+Code source hosted on https://github.com/Devenet/MoodPicker
 */
 
 namespace Utils;
 
 use Core\Config;
+use Core\Setting;
 
 class Session {
-    
+
     static public function Add($name, $value = 1) {
-        $_SESSION[Config::Get('app').'_'.$name] = $value;
+        $_SESSION[Setting::APP_NAME.'_'.$name] = $value;
     }
-    
+
     static public function Exists($name) {
-        return isset($_SESSION[Config::Get('app').'_'.$name]);
+        return isset($_SESSION[Setting::APP_NAME.'_'.$name]);
     }
-    
+
     static public function Get($name) {
         if (! self::Exists($name)) { return NULL; }
-        return htmlspecialchars($_SESSION[Config::Get('app').'_'.$name]);
+        return htmlspecialchars($_SESSION[Setting::APP_NAME.'_'.$name]);
     }
-    
+
     static public function Remove($name) {
-        $_SESSION[Config::Get('app').'_'.$name] = NULL;
-        unset($_SESSION[Config::Get('app').'_'.$name]);
+        $_SESSION[Setting::APP_NAME.'_'.$name] = NULL;
+        unset($_SESSION[Setting::APP_NAME.'_'.$name]);
     }
 
 }

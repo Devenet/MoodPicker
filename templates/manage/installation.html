@@ -5,7 +5,7 @@
 </head>
 <body class="index">
     {include="../inc/navbar"}
-    
+
     <div class="container">
         <ol class="breadcrumb espace-bottom">
             <li><a href="{$URL}">{$app_name}</a></li>
@@ -27,11 +27,11 @@
             <div class="alert alert-danger col-sm-8 col-sm-offset-2"><strong>Oups!</strong> {$form_error}</div>
             <div class="clearfix"></div>
             {/if}
-            
+
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-8">
-                    <h3 class="no-espace-bottom">Create the admin account</h3>
-                    <p class="help-block">You will be able to create other accounts after.</p>
+                    <h3 class="no-espace-bottom">Administrator account</h3>
+                    <p class="help-block">You will be able to create other accounts later.</p>
                     {if="!empty($_GET['force-erase'])"}<p class="bg-warning bg-breath">Be careful: the user will be erased.</p>{/if}
                 </div>
             </div>
@@ -39,14 +39,26 @@
 
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-8">
-                    <h3 class="no-espace-bottom">Set main API settings</h3>
-                    <p class="help-block">You will be able to change it and manage API credentials after, and to set other settings too.</p>
+                    <h3 class="no-espace-bottom">Application settings</h3>
+                    <p class="help-block">You will be able to update it later.</p>
+                </div>
+            </div>
+            {include="settings/_form_app"}
+
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-8">
+                    <h3 class="no-espace-bottom">API settings</h3>
+                    <p class="help-block">You will be able to update it and manage API credentials later.</p>
                 </div>
             </div>
             {include="settings/_form_api"}
 
             <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-8">
+              <div class="col-sm-2 text-right">
+                <div class="h3">✓</div>
+              </div>
+                <div class="col-sm-8">
                     <h3 class="no-espace-bottom">That’s it</h3>
                     <p class="help-block">The administration will be available under <a href="{$URL}manage">{$_SERVER['SERVER_NAME']}{$URL}manage</a>.</p>
                 </div>
@@ -59,9 +71,9 @@
                 </div>
             </div>
         </form>
-                
+
     </div>
-    
+
     {include="../inc/footer"}
     {include="../inc/script"}
 </body>

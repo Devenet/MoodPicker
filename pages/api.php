@@ -13,12 +13,13 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-Code source hosted on https://github.com/nicolabricot/MoodPicker
+Code source hosted on https://github.com/Devenet/MoodPicker
 */
 
 use Picker\API;
 use Manage\ApiRequest;
-use Manage\Setting;
+use Manage\Authentification;
+use Core\Setting;
 use Utils\Cookie;
 use Utils\TextHelper;
 
@@ -32,11 +33,11 @@ switch($this->request(1)) {
             case 'version':
                 $api->version();
                 break;
-                
+
             case 'translation':
                 $api->translation();
                 break;
-            
+
             case 'day':
                 $api->day($this->request(3));
                 break;
@@ -46,14 +47,14 @@ switch($this->request(1)) {
             case 'year':
                 $api->year($this->request(3));
                 break;
-            
+
             case 'token':
                 $api->token(file_get_contents('php://input'));
                 break;
             case 'authentification':
                 $api->authentification(file_get_contents('php://input'));
                 break;
-            
+
             case 'submit':
                 $api->submit(file_get_contents('php://input'));
                 break;
@@ -64,7 +65,8 @@ switch($this->request(1)) {
         break;
 
     case 'documentation':
-        if (! (new Setting('api_display_doc'))->getValue()) { break; }
+        $auth = new Authentification;
+        if (! (new Setting('api_display_doc'))->getValue() && !$auth->isLogged()) { break; }
         $this->page('api/documentation');
         $this->fakePage('api');
         $this->assign('api_path', API::API_PATH);

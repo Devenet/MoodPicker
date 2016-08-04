@@ -13,17 +13,27 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-Code source hosted on https://github.com/nicolabricot/MoodPicker
+Code source hosted on https://github.com/Devenet/MoodPicker
 */
 
-namespace Manage;
+namespace Core;
 
 use Database\SQLite;
 
 class Setting {
-    
+
     const DB = 'moodpicker';
+    const APP_NAME = 'MoodPicker';
+
     private static $db;
+    private static $settings = array(
+        'app_id' => 'mood_picker',
+        'app_name' => 'Mood Picker',
+        'app_title' => 'Share your mood!',
+        'app_copyright' => 'Powered by enthusiast people',
+        'app_description' => 'Share your mood everyday and track tendances',
+        'app_robots' => 'index,follow,noarchive'
+    );
 
     protected $id;
     protected $name;
@@ -31,6 +41,29 @@ class Setting {
 
     private static function loadDataBase() {
         if (empty(self::$db)) { self::$db = SQLite::Instance(self::DB); }
+    }
+
+    public static function DefaultSetting($name) {
+      return self::$settings[$name];
+    }
+    // return a string for robots meta tag
+    public static function ParseRobots($index, $follow, $archive) {
+    	$result = array(
+    		($index ? 'index' : 'noindex'),
+    		($follow ? 'follow' : 'nofollow'),
+    		($archive ? 'archive' : 'noarchive')
+    	);
+    	return implode(',', $result);
+    }
+    // split the robots string used in meta tag
+    public static function GetRobots($robots) {
+    	$robots = explode(',', $robots);
+    	$result = array (
+    		'index' => ($robots[0] == 'index'),
+    		'follow' => ($robots[1] == 'follow'),
+    		'archive' => ($robots[2] == 'archive')
+    	);
+    	return $result;
     }
 
     public function __construct($name = NULL) {
@@ -64,6 +97,13 @@ class Setting {
     }
     public function getValue() {
         return $this->value;
+    }
+
+    public function getValueOrDefault() {
+      if (empty($this->value)) {
+        return array_key_exists($this->name, Setting::$settings) ? Setting::$settings[$this->name] : NULL;
+      }
+      return $this->value;
     }
 
     public function setValue($value) {

@@ -13,11 +13,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-Code source hosted on https://github.com/nicolabricot/MoodPicker
+Code source hosted on https://github.com/Devenet/MoodPicker
 */
 
 use Core\Config;
-use Manage\Setting;
+use Core\Setting;
 use Manage\User;
 use Manage\ApiHelper;
 use Manage\ApiRequest;
@@ -37,6 +37,8 @@ switch($this->request(1)) {
             try {
                 $this->assign('form_data', array(
                     'email' => htmlspecialchars($_POST['email']),
+                    'app_name' => htmlspecialchars($_POST['app_name']),
+                    'app_title' => htmlspecialchars($_POST['app_title']),
                     'api_display_doc' => !empty($_POST['api_display_doc']) && $_POST['api_display_doc'] == 'on',
                     'api_requests' => !empty($_POST['api_requests']) && $_POST['api_requests'] == 'on'
                 ));
@@ -55,8 +57,19 @@ switch($this->request(1)) {
 
                 // settings
                 $settings = array();
+                if (empty($_POST['app_name']))
+                    throw new \Exception('Please enter a valid application name.');
+                if (empty($_POST['app_title']))
+                    throw new \Exception('Please enter a valid application title.');
+
+                $settings['app_name'] = htmlspecialchars($_POST['app_name']);
+                $settings['app_title'] = htmlspecialchars($_POST['app_title']);
                 $settings['api_display_doc'] = !empty($_POST['api_display_doc']);
                 $settings['api_requests'] = !empty($_POST['api_requests']);
+                // set other default settings
+                $settings['app_copyright'] = Setting::DefaultSetting('app_copyright');
+                $settings['app_description'] = Setting::DefaultSetting('app_description');
+                $settings['app_robots'] = Setting::DefaultSetting('app_robots');
 
                 // save them
                 if ($u->availableEmail($_POST['email'])) { $u->setEmail($_POST['email']); }
@@ -89,6 +102,9 @@ switch($this->request(1)) {
         }
 
         $this->page('manage/installation');
+        $this->assign('default_app_name', Setting::DefaultSetting('app_name'));
+        $this->assign('default_app_title', Setting::DefaultSetting('app_title'));
+        $this->assign('default_app_copyright', Setting::DefaultSetting('app_copyright'));
         $this->getToken();
 
         break;
@@ -577,23 +593,41 @@ switch($this->request(1)) {
         $this->requireAuth();
         if (!empty($_POST)) {
             $this->acceptToken();
-            try {
-                $this->assign('form_data', array(
-                    //'conf_email_sender' => $_POST['conf_email_sender'],
-                    'api_display_doc' => !empty($_POST['api_display_doc']) && $_POST['api_display_doc'] == 'on',
-                    'api_requests' => !empty($_POST['api_requests']) && $_POST['api_requests'] == 'on'
-                ));
+            $this->assign('form_data', array(
+              'app_name' => htmlspecialchars($_POST['app_name']),
+              'app_title' => htmlspecialchars($_POST['app_title']),
+              'app_copyright' => htmlspecialchars($_POST['app_copyright']),
+              'app_description' => htmlspecialchars($_POST['app_description']),
+              'app_robots' => Setting::GetRobots(Setting::ParseRobots(
+                in_array('index', $_POST['app_robots']),
+                in_array('follow', $_POST['app_robots']),
+                in_array('archive', $_POST['app_robots']) )),
+              //'conf_email_sender' => $_POST['conf_email_sender'],
+              'api_display_doc' => !empty($_POST['api_display_doc']) && $_POST['api_display_doc'] == 'on',
+              'api_requests' => !empty($_POST['api_requests']) && $_POST['api_requests'] == 'on'
+            ));
 
+            try {
                 $settings = array();
-                // text input
+                if (empty($_POST['app_name']))
+                    throw new \Exception('Please enter a valid application name.');
+                if (empty($_POST['app_title']))
+                    throw new \Exception('Please enter a valid application title.');
+
+                $settings['app_name'] = htmlspecialchars($_POST['app_name']);
+                $settings['app_title'] = htmlspecialchars($_POST['app_title']);
+                $settings['app_copyright'] = htmlspecialchars($_POST['app_copyright']);
+                $settings['app_description'] = empty($_POST['app_description']) ? htmlspecialchars($_POST['app_title']) : htmlspecialchars($_POST['app_description']);
+                $settings['app_robots'] = Setting::ParseRobots(in_array('index', $_POST['app_robots']), in_array('follow', $_POST['app_robots']), in_array('archive', $_POST['app_robots']));
+
+                $settings['api_display_doc'] = !empty($_POST['api_display_doc']);
+                $settings['api_requests'] = !empty($_POST['api_requests']);
+
                 /*
                 if (!empty($_POST['conf_email_sender']) && !filter_var($_POST['conf_email_sender'], FILTER_VALIDATE_EMAIL))
                     throw new \Exception('Please enter a valid sender email address.');
                 $settings['conf_email_sender'] = htmlspecialchars($_POST['conf_email_sender']);
                 */
-                // checkbox
-                $settings['api_display_doc'] = !empty($_POST['api_display_doc']);
-                $settings['api_requests'] = !empty($_POST['api_requests']);
 
                 foreach($settings as $key => $value) {
                     $s = new Setting($key);
@@ -604,8 +638,7 @@ switch($this->request(1)) {
                     }
                 }
 
-                header('Location: '.$this->URL('manage/settings?updated'));
-                exit();
+                $message_success = true;
             }
             catch (\Exception $e) {
                 $this->assign('form_error', $e->getMessage());
@@ -613,13 +646,24 @@ switch($this->request(1)) {
         }
         else {
             $this->assign('form_data', array(
-                'conf_email_sender' => (new Setting('conf_email_sender'))->getValue(),
-                'api_display_doc' => (new Setting('api_display_doc'))->getValue(),
-                'api_requests' => (new Setting('api_requests'))->getValue()
+              'app_name' => (new Setting('app_name'))->getValue(),
+              'app_title' => (new Setting('app_title'))->getValue(),
+              'app_copyright' => (new Setting('app_copyright'))->getValue(),
+              'app_description' => (new Setting('app_description'))->getValue(),
+              'app_robots' => Setting::GetRobots((new Setting('app_robots'))->getValue()),
+              'conf_email_sender' => (new Setting('conf_email_sender'))->getValue(),
+              'api_display_doc' => (new Setting('api_display_doc'))->getValue(),
+              'api_requests' => (new Setting('api_requests'))->getValue()
             ));
         }
-        if (isset($_GET['updated'])) { $this->assign('message', 'Settings have been updated.'); }
+
+        if (isset($message_success)) { $this->assign('message', 'Settings have been updated.'); }
         $this->page('manage/settings');
+        $this->assign('settings_app_details', true);
+        $this->assign('default_app_name', Setting::DefaultSetting('app_name'));
+        $this->assign('default_app_title', Setting::DefaultSetting('app_title'));
+        $this->assign('default_app_copyright', Setting::DefaultSetting('app_copyright'));
+        $this->assign('default_app_description', Setting::DefaultSetting('app_description'));
         $this->getToken();
 
         break;

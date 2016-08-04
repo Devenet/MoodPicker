@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-Code source hosted on https://github.com/nicolabricot/MoodPicker
+Code source hosted on https://github.com/Devenet/MoodPicker
 */
 
 set_include_path('./library');
@@ -22,8 +22,9 @@ spl_autoload_register();
 
 use Core\Application;
 use Core\Config;
+use Core\Setting;
 use Utils\Menu;
-use Manage\Setting;
+use Manage\Authentification;
 
 if (Config::Get('debug')) {
     error_reporting(-1);
@@ -34,6 +35,7 @@ if (Config::Get('debug')) {
 }
 
 $app = new Application();
+$auth = new Authentification();
 
 $navbar = new Menu();
 $navbar->item($app->URL(), 'Share')
@@ -41,13 +43,7 @@ $navbar->item($app->URL(), 'Share')
        ->item($app->URL('details'), 'Details');
 
 $navbar_right = new Menu();
-/*
-$dropdown = new Menu(Menu::DROPDOWN);
-$dropdown->item($app->URL('api'), 'API')
-         ->item($app->URL('settings'), 'Settings');
-$navbar_right->dropdown($dropdown, 'More');
-/*/
-if ((new Setting('api_display_doc'))->getValue()) { $navbar_right->item($app->URL('api'), 'API'); }
+if ((new Setting('api_display_doc'))->getValue() || $auth->isLogged()) { $navbar_right->item($app->URL('api'), 'API'); }
 else if ((new Setting('api_requests'))->getValue()) { $navbar_right->item($app->URL('api/request'), 'API'); }
 
 $app->register(Menu::NAVBAR, $navbar);

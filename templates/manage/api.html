@@ -26,6 +26,7 @@
 
         {if="isset($message)"}<div class="alert alert-info col-sm-6 col-sm-offset-3 message"><button type="button" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button> <strong>All right!</strong> {$message}</div>{/if}
 
+        {if="count($apis)>0"}
         <table class="table table-striped table-hover table-responsive">
             <thead>
                 <tr>
@@ -51,6 +52,10 @@
                 {/loop}
             </tbody>
         </table>
+        {else}
+          <p class="margin-bottom">Nothing to display.
+            <br> The big button “Add” on the right should be useful ;-)</p>
+        {/if}
 
     </div>
 
