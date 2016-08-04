@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-Code source hosted on https://github.com/nicolabricot/MoodPicker
+Code source hosted on https://github.com/Devenet/MoodPicker
 */
 
 namespace Picker;
@@ -104,7 +104,7 @@ class Mood {
     
     // get moods from a specific month
     static public function MonthMoods($month = NULL, $year = NULL, $mood_level = NULL) {
-        $month = is_null($month) ? date('m') : $month;
+        $month = is_null($month) ? date('m') : date('m', mktime(0, 0, 0, $month, 1));
         $year = is_null($year) ? date('Y') : $year;
         $moods = array();
         $db = SQLite::Instance();
@@ -142,54 +142,70 @@ class Mood {
         $query->closeCursor();
         return $moods;
     }
+
+    // count generator helper
+    static private function CountHelper($data) {
+        $bads = isset($data[MoodLevel::BAD]) ? $data[MoodLevel::BAD] : 0;
+        $goods = isset($data[MoodLevel::GOOD]) ? $data[MoodLevel::GOOD] : 0;
+        $count = $bads + $goods; 
+        return array(
+            MoodLevel::BAD => $bads,
+            MoodLevel::GOOD => $goods,
+            'count' => $count
+        );
+    }
     
     // count all moods
-    static public function CountAllMoods($mood_level = NULL) {
+    static public function CountAllMoods() {
         $db = SQLite::Instance();
-        if (is_null($mood_level)) {
-            $query = $db->query('SELECT COUNT(id) AS count FROM mood');
-        } else {
-            $query = $db->prepare('SELECT COUNT(id) AS count FROM mood WHERE mood_level = :mood');
-            $query->execute(array('mood' => $mood_level));
-        }
-        $data = $query->fetch();
+        $query = $db->query('SELECT mood_level, COUNT(*) AS count FROM mood GROUP BY mood_level ORDER BY mood_level');
+        $tmp = array();
+        while ($data = $query->fetch())
+            $tmp[$data['mood_level']] = $data['count'];
         $query->closeCursor();
-        return $data['count'];
+        return self::CountHelper($tmp);
     }
     
     // count year moods
-    static public function CountYearMoods($year = NULL, $mood_level = NULL) {
+    static public function CountYearMoods($year = NULL) {
         $year = is_null($year) ? date('Y') : $year;
         $db = SQLite::Instance();
-        $options = array( 'date' => $year );
-        if (is_null($mood_level)) {
-            $query = $db->prepare("SELECT COUNT(id) AS count FROM mood WHERE strftime('%Y', timestamp, 'unixepoch', 'localtime') = :date");
-        } else {
-            $query = $db->prepare("SELECT COUNT(id) AS count FROM mood WHERE mood_level = :mood AND strftime('%Y', timestamp, 'unixepoch', 'localtime') = :date");
-            $options['mood'] = $mood_level;
-        }
-        $query->execute($options);
-        $data = $query->fetch();
+        $query = $db->prepare("SELECT mood_level, COUNT(*) AS count FROM mood WHERE strftime('%Y', timestamp, 'unixepoch', 'localtime') = :date GROUP BY mood_level ORDER BY mood_level");
+        $query->execute(array( 'date' => $year ));
+        $tmp = array();
+        while ($data = $query->fetch())
+            $tmp[$data['mood_level']] = $data['count'];
         $query->closeCursor();
-        return $data['count'];
+        return self::CountHelper($tmp);
     }
     
     // count month moods
-    static public function CountMonthMoods($month = NULL, $year = NULL, $mood_level = NULL) {
+    static public function CountMonthMoods($month = NULL, $year = NULL) {
+        $month = is_null($month) ? date('m') : date('m', mktime(0, 0, 0, $month, 1));
+        $year = is_null($year) ? date('Y') : $year;
+        $db = SQLite::Instance();
+        $query = $db->prepare("SELECT mood_level, COUNT(*) AS count FROM mood WHERE strftime('%Y%m', timestamp, 'unixepoch', 'localtime') = :date GROUP BY mood_level ORDER BY mood_level");
+        $query->execute(array( 'date' => $year.$month ));
+        $tmp = array();
+        while ($data = $query->fetch())
+            $tmp[$data['mood_level']] = $data['count'];
+        $query->closeCursor();
+        return self::CountHelper($tmp);
+    }
+
+    // count day moods
+    static public function CountDayMoods($day = NULL, $month = NULL, $year = NULL) {
+        $day = is_null($day) ? date('d') : $day;
         $month = is_null($month) ? date('m') : $month;
         $year = is_null($year) ? date('Y') : $year;
         $db = SQLite::Instance();
-        $options = array( 'date' => $year.$month );
-        if (is_null($mood_level)) {
-            $query = $db->prepare("SELECT COUNT(id) AS count FROM mood WHERE strftime('%Y%m', timestamp, 'unixepoch', 'localtime') = :date");
-        } else {
-            $query = $db->prepare("SELECT COUNT(id) AS count FROM mood WHERE mood_level = :mood AND strftime('%Y%m', timestamp, 'unixepoch', 'localtime') = :date");
-            $options['mood'] = $mood_level;
-        }
-        $query->execute($options);
-        $data = $query->fetch();
+        $query = $db->prepare("SELECT mood_level, COUNT(*) AS count FROM mood WHERE strftime('%Y%m%d', timestamp, 'unixepoch', 'localtime') = :date GROUP BY mood_level ORDER BY mood_level");
+        $query->execute(array( 'date' => $year.$month.$day ));
+        $tmp = array();
+        while ($data = $query->fetch())
+            $tmp[$data['mood_level']] = $data['count'];
         $query->closeCursor();
-        return $data['count'];
+        return self::CountHelper($tmp);
     }
     
     // return years which have moods saved

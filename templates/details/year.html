@@ -1,16 +1,22 @@
 <!doctype html>
 <html>
 <head>
-	{include="inc/head"}
+	{include="../inc/head"}
 </head>
 <body class="details">
-	{include="inc/navbar"}
+	{include="../inc/navbar"}
 
-	<div class="container">
+	<div class="container espace-bottom">
+        <ol class="breadcrumb espace-bottom">
+            <li><a href="{$URL}">{$app_name}</a></li>
+            <li><a href="{$URL}details">Details</a></li>
+            <li class="active">{$year}</li>
+        </ol>
+
 	    <div class="page-header no-espace-top">
 	        {if="count($years) > 1"}
             <div class="btn-group pull-right">
-                <button type="button" class="btn btn-default" data-toggle="dropdown">Year</button>
+                <button type="button" class="btn btn-default" data-toggle="dropdown">Years</button>
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                     <span class="caret"></span>
                 </button>
@@ -33,16 +39,16 @@
             <div class="col-md-4 col-sm-4 col-xs-4 text-center"><span class="espace-right-sm"><span class="glyphicon glyphicon-thumbs-up text-success"></span></span> {$year_goods_percentage|round:1}%</div>
             <div class="col-md-4 col-sm-4 col-xs-4 text-center"><span class="espace-right-sm"><span class="glyphicon glyphicon-thumbs-down text-danger"></span></span> {$year_bads_percentage|round:1}%</div>
         </div>
-        <div class="row">
+        <div class="row espace-bottom">
             <div class="col-md-8 col-md-offset-2">
-                <h3>Global review</h3>
+                <h3>Global review <small>{$year}</small></h3>
                 <canvas id="chartYear" width="500" height="200"  class="center-block"></canvas>
             </div>
         </div>
     </div>
-    
-    <hr />
-    
+       
+    {if="!empty($months)"}
+    <hr class="container" />
     <div class="container">
         <div class="row espace">
             {loop="$months"}
@@ -50,7 +56,7 @@
                 <div class="media">
                     <div class="pull-left espace-right"><canvas id="chartMonth{$key}" width="125" height="125"></canvas></div>
                     <div class="media-body">
-                        <h2 class="media-heading espace-bottom-sm">{*<a href="details/{$year}/{$key}">*}{function="date('F', mktime(0, 0, 0, $key, 1))"}{*</a>*}</h2>
+                        <h2 class="media-heading espace-bottom-sm"><a href="{$URL}details/{$year}/{$key}">{function="date('F', mktime(0, 0, 0, $key, 1))"}</a></h2>
                         <ul class="list-unstyled">
                             <li><span class="pull-left espace-right-sm"><span class="glyphicon glyphicon-user"></span></span> {$value.total}</li>
                             <li><span class="pull-left espace-right-sm"><span class="glyphicon glyphicon-thumbs-up text-success"></span></span> {$value.goods_percentage|round:1}%</li>
@@ -62,6 +68,7 @@
             {/loop}
         </div>
 	</div>
+    {/if}
     
     <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="loadingModal" aria-hidden="true">
         <div class="modal-dialog modal-sm">
@@ -71,8 +78,8 @@
         </div>
     </div>
     
-    {include="inc/footer"}
-    {include="inc/colorpicker"}
-	{include="inc/script"}
+    {include="../inc/footer"}
+    {include="../inc/colorpicker"}
+	{include="../inc/script"}
 </body>
 </html>

@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+<head>
+    {include="../inc/head"}
+</head>
+<body class="index">
+    {include="../inc/navbar"}
+
+    <div class="container">
+        <ol class="breadcrumb espace-bottom">
+            <li><a href="{$URL}">{$app_name}</a></li>
+            <li><a href="{$URL}api">API</a></li>
+            <!--<li><a href="{$URL}api/request">Request</a></li>-->
+            <li class="active">Request</li>
+        </ol>
+
+        <div class="page-header no-espace-top espace-bottom">
+            <h1>Request for credentials <small>API {$app_api_version}</small></h1>
+        </div>
+
+        <div class="row">
+            <div class="alert alert-success col-sm-8 col-sm-offset-2">
+                <strong>Yipee!</strong> The request has been sent.
+                <br />You will get an email with further instructions when the request will be approved.
+            </div>
+
+            <div class="col-sm-8 col-sm-offset-2">
+                <p>What can you do now?</p>
+                <ul>
+                    <li>Watch <a href="https://www.youtube.com/watch?v=BWIPZvwcnX8" rel="external">an episode</a> of Simon’s Cat</li>
+                    <li>Browse the <a href="{$URL}api/documentation">API documentation</a> to know how to use it</li>
+                    <li>Play the <a href="https://gabrielecirulli.github.io/2048/" rel="external">2048 game</a> to join the numbers</li>
+                    <li>Fork the <a href="https://github.com/Devenet/MoodPicker-Windows">MoodPicker for Windows</a> repository, improve it and make pull requests</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="espace-top text-center lead">
+            Let’s build some fabulous app.
+        </div>
+
+    </div>
+
+    {include="../inc/footer"}
+    {include="../inc/script"}
+</body>
+</html>

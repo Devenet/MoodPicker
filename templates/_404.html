@@ -8,7 +8,7 @@
 
 	<div class="container">
         <div class="row">
-            <div class="col-lg-8 col-lg-offset-2">
+            <div class="col-md-8 col-md-offset-2">
                 <h1>Holy crap, it’s a <strong>404 Error</strong>.</h1>
                 
                 <div class="panel panel-danger espace-top-lg">
@@ -21,11 +21,13 @@
                 </div>
             </div>
         </div>
+
+        {if="isset($exception)"}<div class="row espace"><pre class="col-md-8 col-md-offset-2">Template exception 'Rain\Tpl\NotFoundException' with message 'Template {$exception} not found!'</pre></div>{/if}
         
         <div class="row espace">
-            <div class="col-lg-8 col-lg-offset-2">
+            <div class="col-md-8 col-md-offset-2">
                 <p>To show our support, look at this little cute cat:</p>
-                <img class="center-block img-circle" src="//lorempixel.com/300/300/cats/" alt="Cute cat" />
+                <img class="center-block img-circle" src="{$URL}cats" alt="Cute cat" />
             </div>
         </div>
         
@@ -36,7 +38,7 @@
 	<script>
         $(function(){
             $('img.img-circle').css('cursor', 'pointer');
-            $('img.img-circle').on('click', function(){ $(this).attr('src', $(this).attr('src')+'?'+new Date().getTime()); });
+            $('img.img-circle').on('click', function(){ $(this).attr('src', $(this).attr('src').replace(/\?[0-9]+/, '')+'?'+new Date().getTime()); });
         });
 	</script>
 </body>

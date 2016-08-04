@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+<head>
+    {include="../inc/head"}
+</head>
+<body class="index">
+    {include="../inc/navbar"}
+
+    <div class="container">
+        <ol class="breadcrumb espace-bottom">
+            <li><a href="{$URL}">{$app_name}</a></li>
+            <li class="active">Manage</li>
+        </ol>
+
+        <div class="page-header no-espace-top espace-bottom">
+            <h1>Manage</h1>
+            <div class="title-options">
+                <a href="{$URL}authentification/logout" class="btn btn-default">Logout</a>
+            </div>
+        </div>
+
+        <div class="row text-center">
+            <div class="col-md-4">
+                <a href="{$URL}manage/api" class="btn btn-link btn-lg">API</a>
+            </div>
+            <div class="col-md-4">
+                <a href="{$URL}manage/users" class="btn btn-link btn-lg">Users</a>
+            </div>
+            <div class="col-md-4">
+                <a href="{$URL}manage/settings" class="btn btn-link btn-lg">Settings</a>
+            </div>
+        </div>
+
+    </div>
+
+    {include="../inc/footer"}
+    {include="../inc/script"}
+</body>
+</html>

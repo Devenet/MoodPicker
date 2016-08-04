@@ -19,48 +19,39 @@ Code source hosted on https://github.com/nicolabricot/MoodPicker
 namespace Core;
 
 abstract class Config {
-    
+
     static private $entries = array(
-        'app', 'name',
-        'url', 'title',
-        'description', 'copyright',
         'theme', 'themes',
-        'database', 'api',
-        'debug'
+        'database',
+        'debug', 'app'
     );
     static private $defaultEntries = array(
-        'app' => 'mood_picker',
-        'name' => 'Mood Picker',
-        'title' => 'Share your mood!',
-        'copyright' => 'All rights reserved',
         'database' => array(
             'type' => 'sqlite',
-            'name' => 'mood_picker'
+            'name' => 'moodpicker_data'
         ),
         'themes' => array('default'),
+        'theme' => 'default',
         'debug' => false
     );
     static private $values = NULL;
-    
+
     const DIR_PAGES = 'pages';
     const DIR_TEMPLATES = 'templates';
     const DIR_DATA = 'data';
-    
+
     const FILE_CONFIG = 'config.php';
 
     static private function DefaultValue($entry) {
         return array_key_exists($entry, self::$defaultEntries) ? self::$defaultEntries[$entry] : NULL;
     }
-    
-    static private function LoadConfigFile() {
-        if (! is_file(self::FILE_CONFIG)) { die('<!doctype html><html><body><p><strong>No configuration file <code>config.php</code> found!</strong></p><p>The simple way is to copy the file <code>config.default.php</code> into <code>config.php</code> on the root folder of the application.</p></body></html>'); }
-    }
 
     static public function Get($name) {
         if (is_null(self::$values)) {
-            
-            self::LoadConfigFile();
-            require_once self::Path(self::FILE_CONFIG);
+
+            if (is_file(self::FILE_CONFIG))
+                require_once self::Path(self::FILE_CONFIG);
+            else $_CONFIG = array();
 
             foreach(self::$entries as $entry) {
                 self::$values[$entry] = (array_key_exists($entry, $_CONFIG)) ? $_CONFIG[$entry] : self::DefaultValue($entry);
@@ -68,9 +59,17 @@ abstract class Config {
         }
         return self::$values[$name];
     }
-    
+
     static public function Path($filename = '') {
         return dirname(__FILE__).'/../../'.$filename;
+    }
+
+    // Inspired by Shaarli - Thanks to Sebsauvage
+    static public function IP() {
+        $ip = $_SERVER["REMOTE_ADDR"];
+        if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) { $ip = $ip.'_'.$_SERVER['HTTP_X_FORWARDED_FOR']; }
+        if (isset($_SERVER['HTTP_CLIENT_IP'])) { $ip = $ip.'_'.$_SERVER['HTTP_CLIENT_IP']; }
+        return htmlspecialchars($ip);
     }
 
 }

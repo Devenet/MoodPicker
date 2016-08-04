@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+<head>
+	{include="../../inc/head"}
+</head>
+<body class="index">
+	{include="../../inc/navbar"}
+
+    <div class="container">
+        <ol class="breadcrumb espace-bottom">
+            <li><a href="{$URL}">{$app_name}</a></li>
+            <li><a href="{$URL}manage">Manage</a></li>
+            <li><a href="{$URL}manage/users">Users</a></li>
+            <li class="active">View</li>
+        </ol>
+
+        <div class="page-header no-espace-top espace-bottom">
+            <h1>{$u->getEmail()} <small>#{$u->getId()}</small></h1>
+        </div>
+
+        {if="isset($message)"}<div class="alert alert-info col-sm-6 col-sm-offset-3 message"><button type="button" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button> <strong>All right!</strong> {$message}</div>{/if}
+
+        <form class="form-horizontal" method="post">
+            {if="isset($form_error)"}
+            <div class="alert alert-danger col-sm-8 col-sm-offset-2"><strong>Oups!</strong> {$form_error}</div>
+            <div class="clearfix"></div>
+            {/if}
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-8">
+                    <h3>Credentials</h3>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="u_email" class="col-sm-2 control-label">Email</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" name="u_email" id="u_email" value="{$u->getEmail()}" disabled />
+                </div>
+            </div>
+            <div class="form-group espace-top-md">
+                <label for="u_password" class="col-sm-2 control-label">Password</label>
+                <div class="col-sm-8">
+										<button class="btn btn-link" id="btn-change-password" class="hidden">Change password</button>
+                    <input type="password" class="form-control" name="u_password" id="u_password" value="" required />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-8">
+                    <h3>Last connection</h3>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Date</label>
+                <div class="col-sm-8">
+                    <p class="form-control-static">{if="!empty($u->getLastLogin())"}{function="date('r', $u->getLastLogin())"}{else}Never{/if}</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">IP address</label>
+                <div class="col-sm-8">
+                    <p class="form-control-static">{if="$u->getLastIp() != '0.0.0.0'"}{$u->getLastIp()}{else}N/A{/if}</p>
+                </div>
+            </div>
+
+            <input type="hidden" value="{$token}" name="token" />
+            <div class="form-group form-controls">
+                <div class="col-sm-offset-2 col-sm-8">
+										<a href="{$URL}manage/users" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span> Back</a>
+                    <button type="submit" class="btn btn-primary">Update</button>
+                    <a href="{$URL}manage/users/delete/{$u->getId()}/{$extended_token}" class="btn btn-danger btn-delete pull-right">Delete</a>
+                </div>
+            </div>
+        </form>
+
+    </div>
+
+    {include="../../inc/footer"}
+	{include="../../inc/script"}
+    <script>
+        $(function() {
+            // thanks to browsers password autocompletion
+            $('#u_password').val('');
+						$('#u_password').hide();
+						$('form button[type="submit"]').hide();
+						$('#btn-change-password').on('click', function(e) {
+							$(this).hide();
+							$('#u_password').show().focus();
+							$('form button[type="submit"]').show();
+							e.preventDefault();
+							return false;
+						});
+        });
+    </script>
+</body>
+</html>

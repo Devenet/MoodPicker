@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+<head>
+    {include="../inc/head"}
+</head>
+<body class="index">
+    {include="../inc/navbar"}
+
+    <div class="container">
+        <ol class="breadcrumb espace-bottom">
+            <li><a href="{$URL}">{$app_name}</a></li>
+            <li><a href="{$URL}manage">Manage</a></li>
+            <li class="active">Settings</li>
+        </ol>
+
+        <div class="page-header no-espace-top espace-bottom">
+            <h1>Settings</h1>
+        </div>
+
+        {if="isset($message)"}<div class="alert alert-info col-sm-6 col-sm-offset-3 message"><button type="button" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button> <strong>All right!</strong> {$message}</div>{/if}
+
+        <form class="form-horizontal" role="form" method="post">
+            {if="isset($form_error)"}
+            <div class="alert alert-danger col-sm-8 col-sm-offset-2"><strong>Oups!</strong> {$form_error}</div>
+            <div class="clearfix"></div>
+            {/if}
+
+            {*
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-8">
+                    <h3 id="api">Global settings</h3>
+                </div>
+            </div>
+            {include="settings/_form_global"}
+            *}
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-8">
+                    <h3 id="api">Application settings</h3>
+                </div>
+            </div>
+            {include="settings/_form_app"}
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-8">
+                    <h3 id="api">API settings</h3>
+                </div>
+            </div>
+            {include="settings/_form_api"}
+
+            <input type="hidden" value="{$token}" name="token" />
+            <div class="form-group form-controls">
+                <div class="col-sm-offset-2 col-sm-8">
+                    <button type="submit" class="btn btn-primary">Update</button>
+                    <button type="reset" class="btn btn-default">Reset</button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+
+    {include="../inc/footer"}
+    {include="../inc/script"}
+</body>
+</html>

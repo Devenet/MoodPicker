@@ -1,5 +1,6 @@
 config.php
 !library/core/config.php
-data/api_tokens.db
-data/mood_picker.db
+data/*.db
 data/cache/
+data/ipbans.php
+data/installed

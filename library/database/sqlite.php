@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-Code source hosted on https://github.com/nicolabricot/MoodPicker
+Code source hosted on https://github.com/Devenet/MoodPicker
 */
 
 namespace Database;
@@ -49,7 +49,8 @@ class SQLite {
 
             // load database
             self::$instances[$database] = new PDO('sqlite:'.$db_file);
-            self::$instances[$database]->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            if (Config::Get('debug')) { self::$instances[$database]->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); }
+            else { self::$instances[$database]->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT); }
             self::$instances[$database]->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 
         }

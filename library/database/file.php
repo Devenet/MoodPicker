@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-Code source hosted on https://github.com/nicolabricot/MoodPicker
+Code source hosted on https://github.com/Devenet/MoodPicker
 */
 
 namespace Database;
@@ -22,67 +22,34 @@ use Core\Config;
 
 class File {
 
-    const PHPPREFIX = '<?php /* ';
-    const PHPSUFFIX = ' */ ?>';
-    const PHPEXTENSION = '.php';
+    const FLAG_APPEND = FILE_APPEND;
+    const FLAG_LOCK = LOCK_EX;
+
+    protected $file;
     
-    private static $instance;
-    private static $access = 0;
-    private static $filename;
-
-    static public function Instance($filename) {
-        self::$filename = $filename.self::PHPEXTENSION;
-
-        if (! isset(self::$instance)) {
-            if (! file_exists(Config::DIR_DATA.DIRECTORY_SEPARATOR.self::$filename)) {
-                $data = array();
-                file_put_contents(Config::DIR_DATA.DIRECTORY_SEPARATOR.self::$filename,
-                    self::PHPPREFIX.base64_encode(gzdeflate(serialize($data))).self::PHPSUFFIX
-                );
-            }
-            self::$instance = new FileData(self::$filename);
-        }
-        self::$access++;
-        return self::$instance;
-    }
-    
-    static public function Access() {
-        return self::$access;
-    }
-
-}
-
-class FileData {
-
-    private $filename;
-    private $data;
-
     public function __construct($filename) {
-        $this->filename = $filename;
-        $this->data = $this->read();
+        $this->file = Config::DIR_DATA.DIRECTORY_SEPARATOR.$filename;
     }
 
-    public function GetData() {
-        return $this->data;
+    public function exists() {
+        return is_file($this->file);
+    }
+    public function getFile() {
+        return $this->file;
     }
 
-    public function SaveData($data) {
-        $this->data = $data;
-        $this->write();
+    public function save($data, $flags = 0) {
+        return file_put_contents($this->file, $data, $flags);
+    }
+    public function get() {
+        return $this->exists() ? file_get_contents($this->file) : NULL;
     }
 
-    private function read() {
-        return unserialize(gzinflate(base64_decode(substr(
-            file_get_contents(Config::DIR_DATA.DIRECTORY_SEPARATOR.$this->filename),
-            strlen(File::PHPPREFIX), -strlen(File::PHPSUFFIX))))
-        );
-    }
-    private function write() {
-        file_put_contents(Config::DIR_DATA.DIRECTORY_SEPARATOR.$this->filename,
-            File::PHPPREFIX.base64_encode(gzdeflate(serialize($this->data))).File::PHPSUFFIX
-        );
+    public function delete() {
+        return unlink($this->file);
     }
 
 }
+
 
 ?>

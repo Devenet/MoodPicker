@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+<head>
+	{include="../../inc/head"}
+</head>
+<body class="index">
+	{include="../../inc/navbar"}
+    
+    <div class="container">
+        <ol class="breadcrumb espace-bottom">
+            <li><a href="{$URL}">{$app_name}</a></li>
+            <li><a href="{$URL}manage">Manage</a></li>
+            <li><a href="{$URL}manage/users">Users</a></li>
+            <li class="active">Delete</li>
+        </ol>
+
+        <div class="page-header no-espace-top espace-bottom">
+            <h1>Delete <small>Users</small></h1>
+        </div>
+
+        <form class="form-horizontal" role="form" method="post">
+            {if="isset($form_error)"}
+            <div class="alert alert-danger col-sm-8 col-sm-offset-2"><strong>Oups!</strong> {$form_error}</div>
+            <div class="clearfix"></div>
+            {/if}
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-8">
+                    <div class="checkbox">
+                        <label for="delete">
+                            <input type="checkbox" name="delete" id="delete" autofocus /> Yes I’m absolutly sure I want to delete the user <strong>{$user.email}</strong>.
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" value="{$token}" name="token" />
+            <input type="hidden" value="{$user.id}" name="user_id" />
+            <div class="form-group form-controls">
+                <div class="col-sm-offset-2 col-sm-8">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <a href="{$URL}manage/users" class="btn btn-default tip" title="Return to users list" data-placement="right">Back to safety</a>
+                </div>
+            </div>
+        </form>
+
+    </div>
+    
+    {include="../../inc/footer"}
+	{include="../../inc/script"}
+</body>
+</html>

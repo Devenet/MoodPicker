@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+<head>
+    {include="../inc/head"}
+</head>
+<body class="index">
+    {include="../inc/navbar"}
+
+    <div class="container">
+        <ol class="breadcrumb espace-bottom">
+            <li><a href="{$URL}">{$app_name}</a></li>
+            <li><a href="{$URL}manage">Manage</a></li>
+            <li class="active">Installation</li>
+        </ol>
+
+        <div class="page-header no-espace-top espace-bottom">
+            <h1>Welcome to Mood Picker!
+                <small>First run</small></h1>
+        </div>
+
+        <p class="bg-primary bg-breath text-center espace-bottom">
+            It seems that is the first time your run the application! So let’s configure the app.
+        </p>
+
+        <form class="form-horizontal" role="form" method="post">
+            {if="isset($form_error)"}
+            <div class="alert alert-danger col-sm-8 col-sm-offset-2"><strong>Oups!</strong> {$form_error}</div>
+            <div class="clearfix"></div>
+            {/if}
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-8">
+                    <h3 class="no-espace-bottom">Administrator account</h3>
+                    <p class="help-block">You will be able to create other accounts later.</p>
+                    {if="!empty($_GET['force-erase'])"}<p class="bg-warning bg-breath">Be careful: the user will be erased.</p>{/if}
+                </div>
+            </div>
+            {include="users/_form_add"}
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-8">
+                    <h3 class="no-espace-bottom">Application settings</h3>
+                    <p class="help-block">You will be able to update it later.</p>
+                </div>
+            </div>
+            {include="settings/_form_app"}
+
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-8">
+                    <h3 class="no-espace-bottom">API settings</h3>
+                    <p class="help-block">You will be able to update it and manage API credentials later.</p>
+                </div>
+            </div>
+            {include="settings/_form_api"}
+
+            <div class="form-group">
+              <div class="col-sm-2 text-right">
+                <div class="h3">✓</div>
+              </div>
+                <div class="col-sm-8">
+                    <h3 class="no-espace-bottom">That’s it</h3>
+                    <p class="help-block">The administration will be available under <a href="{$URL}manage">{$_SERVER['SERVER_NAME']}{$URL}manage</a>.</p>
+                </div>
+            </div>
+
+            <input type="hidden" value="{$token}" name="token" />
+            <div class="form-group form-controls">
+                <div class="col-sm-offset-2 col-sm-8">
+                    <button type="submit" class="btn btn-primary">OK, let’s go!</button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+
+    {include="../inc/footer"}
+    {include="../inc/script"}
+</body>
+</html>

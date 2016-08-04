@@ -1,0 +1,7 @@
+<div class="form-group">
+    <label for="conf_email_sender" class="col-sm-2 control-label">Sender email</label>
+    <div class="col-sm-8">
+        <input type="email" class="form-control" name="conf_email_sender" id="conf_email_sender" placeholder="moods@domain.tld" {if="isset($form_data.conf_email_sender)"}value="{$form_data.conf_email_sender}"{/if} aria-describedby="conf_email_sender_help" />
+        <span id="conf_email_sender_help" class="help-block">PHP will try to override the sender email address used by the server with this given.</span>
+    </div>
+</div>

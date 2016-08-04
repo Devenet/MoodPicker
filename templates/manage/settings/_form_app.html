@@ -1,0 +1,44 @@
+<div class="form-group">
+    <label for="app_name" class="col-sm-2 control-label">Name</label>
+    <div class="col-sm-8">
+        <input type="text" class="form-control" name="app_name" id="app_name" placeholder="{$default_app_name}" value="{if="isset($form_data.app_name)"}{$form_data.app_name}{else}{$default_app_name}{/if}" required>
+    </div>
+</div>
+<div class="form-group">
+    <label for="app_title" class="col-sm-2 control-label">Title</label>
+    <div class="col-sm-8">
+        <input type="text" class="form-control" name="app_title" id="app_title" placeholder="{$default_app_title}" value="{if="isset($form_data.app_title)"}{$form_data.app_title}{else}{$default_app_title}{/if}" required>
+    </div>
+</div>
+
+{if="isset($settings_app_details)"}
+<div class="form-group espace-top">
+    <label for="app_copyright" class="col-sm-2 control-label">Copyright</label>
+    <div class="col-sm-8">
+        <input type="text" class="form-control" name="app_copyright" id="app_copyright" placeholder="{$default_app_copyright}" value="{if="isset($form_data.app_copyright)"}{$form_data.app_copyright}{else}{$default_app_copyright}{/if}" aria-describedby="app_copyright_help">
+        <span id="app_copyright_help" class="help-block">Copyright notice displayed on footer.</span>
+    </div>
+</div>
+
+<div class="form-group no-espace-bottom">
+    <label for="app_description" class="col-sm-2 control-label">Description</label>
+    <div class="col-sm-8">
+        <input type="text" class="form-control" name="app_description" id="app_description" placeholder="{$default_app_description}" value="{if="isset($form_data.app_description)"}{$form_data.app_description}{else}{$default_app_description}{/if}" aria-describedby="app_description_help">
+        <span id="app_description_help" class="help-block">Meta description tag for search engines.</span>
+    </div>
+</div>
+<div class="form-group">
+		<label for="app_robots" class="control-label col-md-2">Robots</label>
+		<div class="col-md-8">
+			<label class="checkbox-inline" for="app_robots_index">
+				<input type="checkbox" name="app_robots[]" value="index" id="app_robots_index" {if="$form_data.app_robots.index"}checked="checked" {/if}/> Index
+			</label>
+			<label class="checkbox-inline" for="app_robots_follow">
+				<input type="checkbox" name="app_robots[]" value="follow" id="app_robots_follow" {if="$form_data.app_robots.follow"}checked="checked" {/if}/> Follow
+			</label>
+			<label class="checkbox-inline" for="app_robots_archive">
+				<input type="checkbox" name="app_robots[]" value="archive" id="app_robots_archive" {if="$form_data.app_robots.archive"}checked="checked" {/if}/> Archive
+			</label>
+		</div>
+	</div>
+{/if}

@@ -7,12 +7,16 @@ ErrorDocument 403 /moods/index.php?page=404
 # beautiful URLs
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^([a-z-]+(/[a-z0-9-]+)*)/(\?(.+))?$ $1 [R,L,QSA]
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^([a-z-]+(/[a-z0-9-]+)*)(\?(.+))?$ index.php?page=$1&$4 [L,QSA]
 
 # other pages are 404
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^(.)*$ index.php?page=404 [L]
+RewriteRule ^(.*)$ index.php?page=404&template=$1 [L]
 
 # some security
 Options All -Indexes

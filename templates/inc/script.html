@@ -1,4 +1,4 @@
-{if="$debug"}<div class="db_access">{$db_access}</div>{/if}
+{if="$debug"}<div class="debug_infos">{$build_time} ms &middot; {$db_access} db</div>{/if}
 <script src="{$URL}assets/js/jquery.min.js"></script>
 <script src="{$URL}assets/js/bootstrap.min.js"></script>
 {if="isset($script_files)"}{loop="$script_files"}<script src="{$URL}assets/js/{$value}"></script>{/loop}{/if}

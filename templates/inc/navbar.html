@@ -17,15 +17,28 @@
 
 			<ul class="nav navbar-nav navbar-right">
 				{if="count($themes)>1"}
-	            <li class="dropdown">
+        <li class="dropdown">
 					<a href="?theme=default" class="dropdown-toggle" data-toggle="dropdown">Themes <span class="caret"></span></a>
 					<ul class="dropdown-menu" role="menu">
 						{loop="$themes"}<li><a href="?theme={$value}">{if="$value==$theme"}<strong>{/if}{$value|ucfirst}{if="$value==$theme"}</strong>{/if}</a></li>{/loop}
 					</ul>
-	            </li>
-	            {/if}
-                {if="isset($navbar_right)"}{$navbar_right}{/if}
-            </ul>
+        </li>
+        {/if}
+      	{if="isset($navbar_right)"}{$navbar_right}{/if}
+				<li>
+					{if="!$user_isLogged"}
+	        	<a href="{$URL}manage"><span class="glyphicon glyphicon-user"></span></a>
+	      	{else}
+						<a href="{$URL}manage" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> <span class="caret"></span></a>
+						<ul class="dropdown-menu" role="menu">
+							<li class="dropdown-header">{$user_email}</li>
+
+							<li><a href="{$URL}manage">Manage</a></li>
+							<li><a href="{$URL}authentification/logout">Logout</a></li>
+						</ul>
+	      	{/if}
+				</li>
+      </ul>
 		</div>
 	</div>
 </nav>
